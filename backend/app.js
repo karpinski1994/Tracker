@@ -45,6 +45,12 @@ app.use( '/api/person/list', (req, res, next) => {
 app.use('/api/person/add', (req, res, next) => {
   const person = req.body;
   console.log(person);
+  fs.writeFile("/tracker-data/test", req.body, function (err) {
+    if (err) {
+      return console.log(err);
+    }
+    console.log("The file was saved!");
+  });
   res.status(201).json({
     message: 'Person added successfully'
   });
