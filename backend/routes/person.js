@@ -32,12 +32,11 @@ router.post('/add', (req, res, next) => {
 });
 
 router.get('/list', (req, res, next) => {
-  let persons = [];
   let personsData = {};
    // mozna try catcha wrabac
   if (fs.existsSync(filePath)) {
     const rawPrevPersons = fs.readFileSync(filePath);
-    persons = [...JSON.parse(rawPrevPersons)];
+    const persons = [...JSON.parse(rawPrevPersons)];
     personsData = {
       message: 'Person fetched successfully.',
       persons: persons
@@ -53,12 +52,11 @@ router.get('/list', (req, res, next) => {
 });
 
 router.get('/list', (req, res, next) => {
-  let persons = [];
   let personsData = {};
   // mozna try catcha wrabac
   if (fs.existsSync(filePath)) {
     const rawPrevPersons = fs.readFileSync(filePath);
-    persons = [...JSON.parse(rawPrevPersons)];
+    const persons = [...JSON.parse(rawPrevPersons)];
     personsData = {
       message: 'Persons fetched successfully.',
       persons: persons
@@ -74,14 +72,12 @@ router.get('/list', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
-  let persons = [];
   let personData = {};
   const personId = parseInt(req.params.id);
-  console.log('personId', personId);
   // mozna try catcha wrabac
   if (fs.existsSync(filePath)) {
     const rawPersons = fs.readFileSync(filePath);
-    persons = [...JSON.parse(rawPersons)];
+    const persons = [...JSON.parse(rawPersons)];
     const person = persons.find(p => p.id === personId);
     personData = {
       message: 'Person fetched successfully.',
