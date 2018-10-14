@@ -40,24 +40,33 @@ const persons = [
 
 const person = {
     id: 1,
-    name: 'Dziki dzik',
+    name: "Dzikdzikadasds",
     location: {
       lat: 200,
       lng: 200
     },
     direction: 165
   };
+// ADDING PERSON
+// postData(`http://localhost:3000/api/person/add`, person)
+//   .then((data) => console.log(data))
 
-postData(`http://localhost:3000/api/person/add`, person)
-  .then((data) => console.log(data))
-
-
+// GETTING PERSONS
 // fetch('http://localhost:3000/api/person/list')
 //   .then((response) => response.json())
 //   .then((responseJSON) => {
 //     // do stuff with responseJSON here...
 //     console.log(responseJSON);
 //   });
+
+// GETTING PERSON
+const exId = 4;
+fetch(`http://localhost:3000/api/person/${exId}`)
+  .then((response) => response.json())
+  .then((responseJSON) => {
+    // do stuff with responseJSON here...
+    console.log(responseJSON);
+  });
 
 
       
