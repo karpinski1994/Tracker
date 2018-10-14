@@ -61,12 +61,16 @@ const person = {
 
 // GETTING PERSON
 const exId = 4;
-fetch(`http://localhost:3000/api/person/${exId}`)
-  .then((response) => response.json())
-  .then((responseJSON) => {
-    // do stuff with responseJSON here...
-    console.log(responseJSON);
-  });
+// fetch(`http://localhost:3000/api/person/get/${exId}`)
+//   .then((response) => response.json())
+//   .then((responseJSON) => {
+//     // do stuff with responseJSON here...
+//     console.log(responseJSON);
+//   });
 
-
-      
+// DELETING PERSON
+// fetch(`http://localhost:3000/api/person/delete/${exId}`)
+//   .then((response) => response.json())
+//   .then((responseJSON) => {
+//     console.log(responseJSON);
+//   });
