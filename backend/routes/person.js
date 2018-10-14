@@ -33,26 +33,6 @@ router.post('/add', (req, res, next) => {
 
 router.get('/list', (req, res, next) => {
   let personsData = {};
-   // mozna try catcha wrabac
-  if (fs.existsSync(filePath)) {
-    const rawPrevPersons = fs.readFileSync(filePath);
-    const persons = [...JSON.parse(rawPrevPersons)];
-    personsData = {
-      message: 'Person fetched successfully.',
-      persons: persons
-    };
-    res.status(201).json(personsData);
-  } else {
-    personsData =  {
-       message: 'File with persons doesn\'t exist.',
-    }
-    res.status(404).json(personsData);
-  }
-  
-});
-
-router.get('/list', (req, res, next) => {
-  let personsData = {};
   // mozna try catcha wrabac
   if (fs.existsSync(filePath)) {
     const rawPrevPersons = fs.readFileSync(filePath);
@@ -68,7 +48,6 @@ router.get('/list', (req, res, next) => {
     }
     res.status(404).json(personsData);
   }
-  
 });
 
 router.get('/:id', (req, res, next) => {
