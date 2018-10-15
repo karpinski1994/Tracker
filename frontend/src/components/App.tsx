@@ -15,7 +15,7 @@ export class App extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      persons: this.props.pServ.getPersons();
+      persons: this.props.pServ.getPersons()
     }
   }
 

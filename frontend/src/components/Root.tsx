@@ -7,14 +7,10 @@ interface IState {
   loaded: boolean;
 }
 
-interface IProps {
-  pServ: object;
-}
-
-export class Root extends React.Component<IProps, IState> {
+export class Root extends React.Component<{}, IState> {
   pServ: personsService;
   state: IState;
-  constructor(props: Readonly<IProps>) {
+  constructor(props: Readonly<{}>) {
     super(props);
     this.state = {
       loaded: false,
