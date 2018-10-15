@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { personsService } from '../services/persons.service';
 import { IPerson } from '../models/IPerson';
 
 interface IState {
   persons: Array<IPerson>,
+  person: IPerson
 }
 
 interface IProps {
@@ -15,13 +15,14 @@ export class App extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      persons: this.props.pServ.getPersons()
+      persons: this.props.pServ.getPersons(),
+      person: this.props.pServ.getPerson(1010101110101010)
     }
   }
 
   // person = {
-  //   id: '1010101110101010',
-  //   name: 'Mariusz Kowalski',
+  //   id: '131222210',
+  //   name: 'Marysia nowak',
   //   location: {
   //     lat: 200,
   //     lng: 200
@@ -30,13 +31,15 @@ export class App extends React.Component<IProps, IState> {
   // }
 
   componentDidMount() {
-    // this.pServ.addPerson(this.person);
+    // this.props.pServ.addPerson(this.person);
     // this.pServ.getPerson(1010101110101010);
-
+    // this.props.pServ.deletePerson(13232110);
   }
 
   render() {
     const persons = [...this.state.persons];
+    const person = {...this.state.person};
+    console.log("PERSON", person)
 
     const newPersons = persons.map(p => {
       return (
@@ -49,9 +52,13 @@ export class App extends React.Component<IProps, IState> {
 
     return (
       <h1>
-        Hello world.
+        PERSONS
         <div>
           {newPersons}
+        </div>
+        PERSON
+        <div>
+          {person.name}
         </div>
       </h1>
     );

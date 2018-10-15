@@ -16,27 +16,27 @@ export class personsService {
   }
 
   getPersons() {
-    console.log('persons.service getPersons() persons', this.persons);
     return [...this.persons];
   }
 
+  addPerson(person: IPerson) {
+    this.htServ.addPerson(person);
+  }
+
   getPerson(id: number) {
-    // let person;
-    // let loaded = false;
-    // if (this.persons.length > 0) {
-      console.log(this.persons)
-      this.persons.forEach(p => console.log( p.id !== `${id}` ));
-      // loaded = true;
-    // } else {
-    //   this.htServ.getPerson(id)
-    //     .then(data => {
-    //       person = data.person;
-    //       loaded = true;
-    //     })
-    // }
-    // if(loaded) {
-    //   return person;
-    // }
+    if (this.persons.length > 0) {
+      const person = this.persons.filter(p => p.id === `${id}` )[0];
+      return person;
+    }
+  }
+
+  deletePerson(id: number) {
+    if (this.persons.length > 0) {
+      const persons = [...this.persons];
+      persons.filter(p => p.id !== `${id}`);
+      this.persons = persons;
+      this.htServ.deletePerson(id);
+    }
   }
 
 }
