@@ -69,7 +69,7 @@ router.get('/get/:id', (req, res, next) => {
     res.status(404).json(personData);
   }
 });
-
+// zmienic na delete zamiast get
 router.get('/delete/:id', (req, res, next) => {
   let personsData = {};
   const personId = parseInt(req.params.id);
