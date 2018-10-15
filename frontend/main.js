@@ -39,14 +39,14 @@ const persons = [
 ]
 
 const person = {
-    id: 1,
-    name: "Dzikdzikadasds",
-    location: {
-      lat: 200,
-      lng: 200
-    },
-    direction: 165
-  };
+  id: 1,
+  name: "Dzikdzikadasds",
+  location: {
+    lat: 200,
+    lng: 200
+  },
+  direction: 165
+};
 // ADDING PERSON
 // postData(`http://localhost:3000/api/person/add`, person)
 //   .then((data) => console.log(data))

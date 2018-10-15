@@ -51,7 +51,7 @@ router.get('/list', (req, res, next) => {
 
 router.get('/get/:id', (req, res, next) => {
   let personData = {};
-  const personId = parseInt(req.params.id);
+  const personId = req.params.id;
   // mozna try catcha wrabac
   if (fs.existsSync(filePath)) {
     const rawPersons = fs.readFileSync(filePath);
@@ -71,7 +71,6 @@ router.get('/get/:id', (req, res, next) => {
 });
 
 router.get('/delete/:id', (req, res, next) => {
-  console.log('BLABLABLABLABLA');
   let personsData = {};
   const personId = parseInt(req.params.id);
   // mozna try catcha wrabac
@@ -87,14 +86,14 @@ router.get('/delete/:id', (req, res, next) => {
     fs.writeFile(filePath, JSON.stringify(persons), (err) => {
       res.status(201).json(personsData);
     });
-  } 
+  }
   else {
     personsData = {
       message: 'File with persons doesn\'t exist.',
     }
     res.status(404).json(personsData);
   }
-  
+
 });
 
 module.exports = router;
