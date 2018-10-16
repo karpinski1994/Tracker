@@ -48,7 +48,7 @@ export class App extends React.Component<IProps, IState> {
       <div className="app-container">
         <aside className="cockpit-container">
           <PersonsList persons={this.state.persons} />
-          <AddPerson addPerson={this.props.pServ.addPerson}/>
+          <AddPerson pServ={this.props.pServ}/>
         </aside>
         <main className="map-container">
 

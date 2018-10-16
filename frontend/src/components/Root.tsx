@@ -25,10 +25,11 @@ export class Root extends React.Component<{}, IState> {
 
   load = () => {
     this.pServ.updatePersons()
-      .then(() => {
+      .then((data) => {
         this.setState({
         loaded: true,
-      })
+      });
+      console.log('ROOT PERSONS: ', data);
     });
   }
 

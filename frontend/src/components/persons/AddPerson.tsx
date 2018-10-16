@@ -8,7 +8,7 @@ interface IState {
   lat: string;
 }
 interface IProps {
-  addPerson: Function;
+  pServ: any,
 }
 
 
@@ -41,7 +41,7 @@ export class AddPerson extends React.Component<IProps, IState> {
   }
 
   onAddWorkerHandler = () => {
-    this.props.addPerson({
+    this.props.pServ.addPerson({
           id: Math.random().toString(36).substr(2, 9),
           name: this.state.name,
           location: {

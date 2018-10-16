@@ -1,5 +1,8 @@
 import { IPerson } from '../models/IPerson';
 import { httpService } from './http.service';
+import { PersonsList } from '../components/persons/PersonsList';
+
+const areObjEqual = require('../utils/areObjEqual');
 
 const htServ = new httpService();
 
@@ -7,11 +10,24 @@ export class personsService {
   pServ: personsService;
   htServ = new httpService();
   persons: Array<IPerson> = [];
+  observerList: Array<any> = [];
+
+  addObserver = (obj: any) => {
+    obj.obsId = this.observerList.length;
+    return this.observerList.push(obj);
+  };
+
+  notify = (msg: any) =>{
+    for(var i=0; i < this.observerList.length; i++){
+      this.observerList[i].update(msg);
+    }
+  }
 
   updatePersons() {
     return htServ.getPersons()
     .then(data => {
       this.persons = [...data.persons];
+      console.log('persons.service this.persons:', this.persons)
       return this.persons;
     });
   }
@@ -21,6 +37,7 @@ export class personsService {
   }
 
   addPerson(person: IPerson) {
+    console.log('persons.service addPerson this.persons: ', this.persons)
     htServ.addPerson(person);
   }
 
@@ -39,5 +56,4 @@ export class personsService {
       htServ.deletePerson(id);
     }
   }
-
 }
