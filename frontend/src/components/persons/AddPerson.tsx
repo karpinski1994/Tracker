@@ -42,13 +42,13 @@ export class AddPerson extends React.Component<IProps, IState> {
 
   onAddWorkerHandler = () => {
     this.props.pServ.addPerson({
-          id: Math.random().toString(36).substr(2, 9),
-          name: this.state.name,
-          location: {
-            lat: parseFloat(this.state.lat),
-            lng: parseFloat(this.state.long)
-          },
-          direction: 165
+      id: Math.random().toString(36).substr(2, 9),
+      name: this.state.name,
+      location: {
+        lat: parseFloat(this.state.lat),
+        lng: parseFloat(this.state.long)
+      },
+      direction: 165
     });
     this.setState({
       name: '',

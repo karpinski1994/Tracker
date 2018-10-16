@@ -37,21 +37,28 @@ export class personsService {
   }
 
   addPerson(person: IPerson) {
-    console.log('persons.service addPerson this.persons: ', this.persons)
+    if (this.persons.length > 0) {
+      const updPersons = [...this.persons];
+      const pIndex = updPersons.findIndex(p=> areObjEqual(p, person));
+      if (pIndex === -1) {
+        updPersons.slice(pIndex, 1);
+      }
+      this.persons = updPersons;
+    }
     htServ.addPerson(person);
   }
 
-  getPerson(id: number) {
+  getPerson(id: string) {
     if (this.persons.length > 0) {
       const person = this.persons.filter(p => p.id === `${id}` )[0];
       return person;
     }
   }
 
-  deletePerson(id: number) {
+  deletePerson(id: string) {
     if (this.persons.length > 0) {
       const persons = [...this.persons];
-      persons.filter(p => p.id !== `${id}`);
+      persons.filter(p => p.id !== id);
       this.persons = persons;
       htServ.deletePerson(id);
     }

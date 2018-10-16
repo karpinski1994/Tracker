@@ -28,12 +28,12 @@ export class httpService {
     .then((response) => response.json());
   }
 
-  getPerson(id: number) {
+  getPerson(id: string) {
     return fetch(`http://localhost:3000/api/person/get/${id}`)
       .then((response) => response.json());
   }
 
-  deletePerson(id:number) {
+  deletePerson(id:string) {
     fetch(`http://localhost:3000/api/person/delete/${id}`)
       .then((response) => response.json())
       .then((responseJSON) => {

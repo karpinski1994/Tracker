@@ -4,11 +4,15 @@ import { IPerson } from '../../models/IPerson';
 
 interface IProps {
   persons: IPerson[];
+  pServ: any
 }
 
 export class PersonsList extends React.Component<IProps, {}> {
   constructor(props: IProps) {
     super(props);
+  }
+  onDelPersonHandler = (id: string) => {
+    this.props.pServ.deletePerson(id);
   }
 
   render() {
@@ -17,7 +21,7 @@ export class PersonsList extends React.Component<IProps, {}> {
       return (
         <div key={Math.random().toString(36).substr(2, 9)}>
           {p.name}
-          <button onClick={() => console.log(index)}>X</button>
+          <button onClick={() => this.onDelPersonHandler(p.id)}>X</button>
         </div>
       )
     });
