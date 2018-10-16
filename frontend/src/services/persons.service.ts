@@ -32,7 +32,7 @@ export class personsService {
     });
   }
 
-  getPersons() {
+  getPersons(): IPerson[] {
     return [...this.persons];
   }
 
@@ -44,15 +44,16 @@ export class personsService {
       if (pIndex === -1) {
         updPersons.push(person);
       }
-      this.persons = updPersons;
-      this.notifyAll();
     } else {
       updPersons.push(person);
     }
+    this.persons = updPersons;
+    this.notifyAll();
+
     htServ.addPerson(person);
   }
 
-  getPerson(id: string) {
+  getPerson(id: string): IPerson {
     if (this.persons.length > 0) {
       const person = this.persons.filter(p => p.id === `${id}` )[0];
       return person;
