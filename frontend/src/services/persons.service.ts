@@ -1,16 +1,17 @@
 import { IPerson } from '../models/IPerson';
 import { httpService } from './http.service';
 
-export class personsService {
+const htServ = new httpService();
 
+export class personsService {
+  pServ: personsService;
   htServ = new httpService();
   persons: Array<IPerson> = [];
 
   updatePersons() {
-    return this.htServ.getPersons()
+    return htServ.getPersons()
     .then(data => {
       this.persons = [...data.persons];
-      console.log('persons.service after fetch: ', this.persons);
       return this.persons;
     });
   }
@@ -20,7 +21,7 @@ export class personsService {
   }
 
   addPerson(person: IPerson) {
-    this.htServ.addPerson(person);
+    htServ.addPerson(person);
   }
 
   getPerson(id: number) {
@@ -35,7 +36,7 @@ export class personsService {
       const persons = [...this.persons];
       persons.filter(p => p.id !== `${id}`);
       this.persons = persons;
-      this.htServ.deletePerson(id);
+      htServ.deletePerson(id);
     }
   }
 

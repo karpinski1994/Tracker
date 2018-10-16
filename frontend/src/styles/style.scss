@@ -1,3 +1,42 @@
-.sth {
-  background-color: red;
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-size: 14px;
 }
+// typography
+h2 {
+  margin-bottom: 15px;
+}
+
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+
+.cockpit-container {
+  background-color: aqua;
+  flex-basis: 20%;
+}
+
+.persons-list-container {
+  padding: 30px;
+}
+
+.add-person-container {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+
+  input {
+    margin-bottom: 10px;
+  }
+}
+
+.map-container {
+  padding: 30px;
+  background-color: aquamarine;
+  flex-basis: 80%;
+}
+

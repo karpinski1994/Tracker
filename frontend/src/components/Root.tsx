@@ -35,8 +35,6 @@ export class Root extends React.Component<{}, IState> {
   render() {
     if (!this.state.loaded) {
       return <div>Loading...</div>;
-    } else {
-      this.pServ.getPersons();
     }
     return (
       <App pServ={this.pServ}/>

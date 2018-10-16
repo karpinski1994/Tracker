@@ -2,6 +2,9 @@ import * as React from 'react';
 
 import { IPerson } from '../models/IPerson';
 
+import { PersonsList } from './persons/PersonsList';
+import { AddPerson } from './persons/AddPerson';
+
 interface IState {
   persons: Array<IPerson>,
   person: IPerson
@@ -20,15 +23,15 @@ export class App extends React.Component<IProps, IState> {
     }
   }
 
-  // person = {
-  //   id: '131222210',
-  //   name: 'Marysia nowak',
-  //   location: {
-  //     lat: 200,
-  //     lng: 200
-  //   },
-  //   direction: 165
-  // }
+  person = {
+    id: '131222211233120',
+    name: 'Marysia now123123312ak',
+    location: {
+      lat: 200,
+      lng: 200
+    },
+    direction: 165
+  }
 
   componentDidMount() {
     // this.props.pServ.addPerson(this.person);
@@ -41,26 +44,16 @@ export class App extends React.Component<IProps, IState> {
     const person = {...this.state.person};
     console.log("PERSON", person)
 
-    const newPersons = persons.map(p => {
-      return (
-        <div key={Math.random().toString(36).substr(2, 9)}>
-          {p.name}
-          <button>X</button>
-        </div>
-      )
-    });
-
     return (
-      <h1>
-        PERSONS
-        <div>
-          {newPersons}
-        </div>
-        PERSON
-        <div>
-          {person.name}
-        </div>
-      </h1>
+      <div className="app-container">
+        <aside className="cockpit-container">
+          <PersonsList persons={this.state.persons} />
+          <AddPerson addPerson={this.props.pServ.addPerson}/>
+        </aside>
+        <main className="map-container">
+
+        </main>
+      </div>
     );
   }
 }
