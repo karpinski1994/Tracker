@@ -4,6 +4,7 @@ import { IPerson } from '../models/IPerson';
 
 import { PersonsList } from './persons/PersonsList';
 import { AddPerson } from './persons/AddPerson';
+import MyMapComponent from './map/Map';
 
 interface IState {
   persons: Array<IPerson>,
@@ -48,7 +49,12 @@ export class App extends React.Component<IProps, IState> {
           <AddPerson pServ={this.props.pServ}/>
         </aside>
         <main className="map-container">
-
+          <MyMapComponent
+            googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+            loadingElement={<div style={{ height: `100%` }} />}
+            containerElement={<div style={{ height: `400px` }} />}
+            mapElement={<div style={{ height: `100%` }} />}
+          />
         </main>
       </div>
     );
