@@ -11,8 +11,9 @@ export class PersonsList extends React.Component<IProps, {}> {
   constructor(props: IProps) {
     super(props);
   }
+
   onDelPersonHandler = (id: string) => {
-    this.props.pServ.deletePerson(id);
+    this.props.pServ.deletePerson(id)
   }
 
   render() {

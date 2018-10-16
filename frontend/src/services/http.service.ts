@@ -3,8 +3,6 @@ import { IPerson } from '../models/IPerson';
 export class httpService {
 
   addPerson(person: IPerson) {
-    console.log('ADD WORKS')
-    console.log('http.service person: ',person)
     return fetch(`http://localhost:3000/api/person/add`, {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, cors, *same-origin
@@ -19,11 +17,9 @@ export class httpService {
       body: JSON.stringify(person), // body data type must match "Content-Type" header
       })
       .then(response => response.json())
-      .then(bla => console.log(bla)); // parses response to JSON
   }
 
   getPersons() {
-    console.log('GET WORKS')
     return fetch('http://localhost:3000/api/person/list')
     .then((response) => response.json());
   }
@@ -36,9 +32,6 @@ export class httpService {
   deletePerson(id:string) {
     fetch(`http://localhost:3000/api/person/delete/${id}`)
       .then((response) => response.json())
-      .then((responseJSON) => {
-        console.log(responseJSON);
-      });
   }
 
 }

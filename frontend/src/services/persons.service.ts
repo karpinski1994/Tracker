@@ -1,6 +1,5 @@
 import { IPerson } from '../models/IPerson';
 import { httpService } from './http.service';
-import { PersonsList } from '../components/persons/PersonsList';
 
 const areObjEqual = require('../utils/areObjEqual');
 
@@ -12,23 +11,25 @@ export class personsService {
   persons: Array<IPerson> = [];
   observerList: Array<any> = [];
 
-  addObserver = (obj: any) => {
+  subscribe = (obj: any) => {
     obj.obsId = this.observerList.length;
     return this.observerList.push(obj);
   };
 
-  notify = (msg: any) =>{
+  notifyAll = () =>{
+    console.log('notify persons: ', this.persons)
     for(var i=0; i < this.observerList.length; i++){
-      this.observerList[i].update(msg);
+      this.observerList[i](this.persons);
     }
   }
 
   updatePersons() {
     return htServ.getPersons()
     .then(data => {
-      this.persons = [...data.persons];
-      console.log('persons.service this.persons:', this.persons)
-      return this.persons;
+      if(data.persons) {
+        this.persons = [...data.persons];
+        return this.persons;
+      }
     });
   }
 
@@ -37,13 +38,17 @@ export class personsService {
   }
 
   addPerson(person: IPerson) {
+    let updPersons = [];
     if (this.persons.length > 0) {
-      const updPersons = [...this.persons];
+      updPersons = [...this.persons];
       const pIndex = updPersons.findIndex(p=> areObjEqual(p, person));
       if (pIndex === -1) {
-        updPersons.slice(pIndex, 1);
+        updPersons.push(person);
       }
       this.persons = updPersons;
+      this.notifyAll();
+    } else {
+      updPersons.push(person);
     }
     htServ.addPerson(person);
   }
@@ -56,11 +61,13 @@ export class personsService {
   }
 
   deletePerson(id: string) {
+    let persons;
     if (this.persons.length > 0) {
-      const persons = [...this.persons];
-      persons.filter(p => p.id !== id);
-      this.persons = persons;
+      persons = [...this.persons];
+      const newPersons = persons.filter(p => p.id !== id);
+      this.persons = newPersons;
       htServ.deletePerson(id);
     }
+    this.notifyAll();
   }
 }

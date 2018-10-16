@@ -7,7 +7,6 @@ import { AddPerson } from './persons/AddPerson';
 
 interface IState {
   persons: Array<IPerson>,
-  person: IPerson
 }
 
 interface IProps {
@@ -19,8 +18,10 @@ export class App extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       persons: this.props.pServ.getPersons(),
-      person: this.props.pServ.getPerson(1010101110101010)
     }
+  }
+  componentDidMount() {
+    this.props.pServ.subscribe(this.update);
   }
 
   person = {
@@ -33,16 +34,12 @@ export class App extends React.Component<IProps, IState> {
     direction: 165
   }
 
-  componentDidMount() {
-    // this.props.pServ.addPerson(this.person);
-    // this.pServ.getPerson(1010101110101010);
-    // this.props.pServ.deletePerson(13232110);
+  update = (updPersons: IPerson[]) => {
+    this.setState({ persons: updPersons});
   }
 
+
   render() {
-    const persons = [...this.state.persons];
-    const person = {...this.state.person};
-    console.log("PERSON", person)
 
     return (
       <div className="app-container">
@@ -57,4 +54,3 @@ export class App extends React.Component<IProps, IState> {
     );
   }
 }
-

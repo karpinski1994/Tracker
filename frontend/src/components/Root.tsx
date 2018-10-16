@@ -19,7 +19,6 @@ export class Root extends React.Component<{}, IState> {
   }
 
   componentDidMount() {
-    console.log('did mount Root.tsx')
     this.load();
   }
 
@@ -29,7 +28,6 @@ export class Root extends React.Component<{}, IState> {
         this.setState({
         loaded: true,
       });
-      console.log('ROOT PERSONS: ', data);
     });
   }
 
