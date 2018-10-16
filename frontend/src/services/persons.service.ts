@@ -17,7 +17,6 @@ export class personsService {
   };
 
   notifyAll = () =>{
-    console.log('notify persons: ', this.persons)
     for(var i=0; i < this.observerList.length; i++){
       this.observerList[i](this.persons);
     }
