@@ -7,7 +7,7 @@ const areObjEqual = require('../utils/areObjEqual');
 const filePath = '/tracker-data/persons.json';
 
 getRandomInt = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.random() * (max - min) + min;
 }
 
 router.post('/add', (req, res, next) => {
@@ -107,8 +107,8 @@ router.get('/walking', (req, res, next) => {
     const rawPrevPersons = fs.readFileSync(filePath);
     const persons = [...JSON.parse(rawPrevPersons)];
     persons.forEach(p => {
-      p.location.lat += getRandomInt(-1,1);
-      p.location.lng += getRandomInt(-1,1);
+      p.location.lat += getRandomInt(-0.0005,0.0005);
+      p.location.lng += getRandomInt(-0.0005,0.0005);
     });
     personsData = {
       message: 'Persons fetched successfully.',
