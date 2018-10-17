@@ -16,9 +16,9 @@ export class AddPerson extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      name: '',
-      lat: '',
-      long: ''
+      name: 'Krystyna Skarbek',
+      lat: '-34.644',
+      long: '150.600'
     }
   }
 
@@ -40,6 +40,10 @@ export class AddPerson extends React.Component<IProps, IState> {
     });
   }
 
+  getRandomInt = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
   onAddWorkerHandler = () => {
     this.props.pServ.addPerson({
       id: Math.random().toString(36).substr(2, 9),
@@ -48,13 +52,13 @@ export class AddPerson extends React.Component<IProps, IState> {
         lat: parseFloat(this.state.lat),
         lng: parseFloat(this.state.long)
       },
-      direction: 165
+      direction: this.getRandomInt(0, 360)
     });
-    this.setState({
-      name: '',
-      lat: '',
-      long: ''
-    })
+    // this.setState({
+    //   name: '',
+    //   lat: '',
+    //   long: ''
+    // })
   }
 
   render() {
