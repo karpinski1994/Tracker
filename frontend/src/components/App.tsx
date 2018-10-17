@@ -23,6 +23,12 @@ export class App extends React.Component<IProps, IState> {
   }
   componentDidMount() {
     this.props.pServ.subscribe(this.update);
+    setInterval(() => {
+      fetch('http://localhost:3000/api/person/walking')
+      .then((response) => response.json())
+      .then(data => this.setState({ persons: data.persons }));
+    }, 2000);
+
   }
 
   person = {

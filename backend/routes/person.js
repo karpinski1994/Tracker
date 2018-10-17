@@ -6,6 +6,10 @@ const areObjEqual = require('../utils/areObjEqual');
 
 const filePath = '/tracker-data/persons.json';
 
+getRandomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 router.post('/add', (req, res, next) => {
   const person = req.body;
   let curPersons = [];
@@ -69,7 +73,7 @@ router.get('/get/:id', (req, res, next) => {
     res.status(404).json(personData);
   }
 });
-// zmienic na delete zamiast get
+
 router.get('/delete/:id', (req, res, next) => {
   let personsData = {};
   const personId = parseInt(req.params.id);
@@ -93,7 +97,31 @@ router.get('/delete/:id', (req, res, next) => {
     }
     res.status(404).json(personsData);
   }
-
 });
 
+router.get('/walking', (req, res, next) => {
+
+  let personsData = {};
+  // mozna try catcha wrabac
+  if (fs.existsSync(filePath)) {
+    const rawPrevPersons = fs.readFileSync(filePath);
+    const persons = [...JSON.parse(rawPrevPersons)];
+    persons.forEach(p => {
+      p.location.lat += getRandomInt(-1,1);
+      p.location.lng += getRandomInt(-1,1);
+    });
+    personsData = {
+      message: 'Persons fetched successfully.',
+      persons: persons
+    };
+    fs.writeFile(filePath, JSON.stringify(persons), (err) => {
+      res.status(201).json(personsData);
+    });
+  } else {
+    personsData = {
+      message: 'File with persons doesn\'t exist.',
+    }
+    res.status(404).json(personsData);
+  }
+});
 module.exports = router;
