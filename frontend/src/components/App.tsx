@@ -4,7 +4,7 @@ import { IPerson } from '../models/IPerson';
 
 import { PersonsList } from './persons/PersonsList';
 import { AddPerson } from './persons/AddPerson';
-import MyMapComponent from './map/Map';
+import { MyMapComponent } from './map/Map';
 
 interface IState {
   persons: Array<IPerson>,
@@ -54,6 +54,7 @@ export class App extends React.Component<IProps, IState> {
             loadingElement={<div style={{ height: `100%` }} />}
             containerElement={<div style={{ height: `400px` }} />}
             mapElement={<div style={{ height: `100%` }} />}
+            persons={this.state.persons}
           />
         </main>
       </div>
