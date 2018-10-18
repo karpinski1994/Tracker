@@ -6,6 +6,8 @@ const areObjEqual = require('../utils/areObjEqual');
 
 const filePath = '/tracker-data/persons.json';
 
+const WalkingManager = require('../managers/WalkingManager');
+
 getRandomInt = (min, max) => {
   return Math.random() * (max - min) + min;
 }
@@ -99,6 +101,8 @@ router.get('/delete/:id', (req, res, next) => {
   }
 });
 
+const walkingManager = new WalkingManager();
+
 router.get('/walking', (req, res, next) => {
 
   let personsData = {};
@@ -106,13 +110,10 @@ router.get('/walking', (req, res, next) => {
   if (fs.existsSync(filePath)) {
     const rawPrevPersons = fs.readFileSync(filePath);
     const persons = [...JSON.parse(rawPrevPersons)];
-    persons.forEach(p => {
-      p.location.lat += getRandomInt(-0.0005,0.0005);
-      p.location.lng += getRandomInt(-0.0005,0.0005);
-    });
+    const newPersons = walkingManager.moveAll(persons);
     personsData = {
       message: 'Persons fetched successfully.',
-      persons: persons
+      persons: newPersons
     };
     fs.writeFile(filePath, JSON.stringify(persons), (err) => {
       res.status(201).json(personsData);

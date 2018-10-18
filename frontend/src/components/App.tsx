@@ -26,7 +26,11 @@ export class App extends React.Component<IProps, IState> {
     setInterval(() => {
       fetch('http://localhost:3000/api/person/walking')
       .then((response) => response.json())
-      .then(data => this.setState({ persons: data.persons }));
+      .then(data =>  {
+          data.persons.forEach((p: IPerson) => console.log(p.direction));
+          this.setState({ persons: data.persons });
+        }
+      );
     }, 2000);
 
   }
@@ -38,7 +42,7 @@ export class App extends React.Component<IProps, IState> {
       lat: 200,
       lng: 200
     },
-    direction: 165
+    direction: 0
   }
 
   update = (updPersons: IPerson[]) => {
