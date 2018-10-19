@@ -103,12 +103,14 @@ router.get('/delete/:id', (req, res, next) => {
 
 const walkingManager = new WalkingManager();
 
-const walkingInterval = setInterval(() => {
-  console.log('walking interval on the server set on!')
-}, 1000);
 
+
+let timer;
 
 router.get('/mode/walking', (req, res, next) => {
+  timer = setInterval(function() {
+      console.log('Interval is running');
+  }, 1000);
   let personsData = {};
   // mozna try catcha wrabac
   if (fs.existsSync(filePath)) {
@@ -130,7 +132,11 @@ router.get('/mode/walking', (req, res, next) => {
   }
 });
 
+
+
+
 router.get('/mode/stationary', (req, res, next) => {
+  clearInterval(timer);
     const personsData = {
       message: 'Mode: stationary.'
     }
