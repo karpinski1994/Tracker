@@ -17,8 +17,8 @@ export class AddPerson extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       name: 'Krystyna Skarbek',
-      lat: '45.46416',
-      long: '9.19034'
+      lat: '51.509865',
+      long: '-0.118092'
     }
   }
 

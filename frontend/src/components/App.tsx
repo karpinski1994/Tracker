@@ -45,21 +45,17 @@ export class App extends React.Component<IProps, IState> {
       fetch('http://localhost:3000/api/person/mode/walking')
       .then((response) => response.json())
       .then(data =>  {
-          data.persons.forEach((p: IPerson) => console.log(p.direction));
           this.setState({ persons: data.persons });
         }
       );
-    }, 500);
+    }, 2000);
   }
 
   setStationaryHandler = () => {
     clearInterval(this.walkingInterval);
     fetch('http://localhost:3000/api/person/mode/stationary')
-      .then((response) => response.json())
-      .then(data =>  {
-          console.log(data);
-        }
-      );
+    .then(data => data.json())
+    .then(message => console.log(message));
   }
 
   render() {
@@ -70,8 +66,8 @@ export class App extends React.Component<IProps, IState> {
           <AddPerson pServ={this.props.pServ}/>
         </aside>
         <main className="map-container">
-        <button onClick={() => this.setWalkingHandler()}>Walking</button>
-        <button onClick={() => this.setStationaryHandler()}>Stationary</button>
+          <button onClick={() => this.setWalkingHandler()}>Walking</button>
+          <button onClick={() => this.setStationaryHandler()}>Stationary</button>
           <MyMapComponent
             googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
             loadingElement={<div style={{ height: `100%` }} />}
