@@ -4,6 +4,7 @@ import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-map
 export const MyMapComponent = withScriptjs(withGoogleMap((props: any) => {
   let prevDir;
   const personsMarkers = props.persons.map((p: any) => {
+    console.log(p.direction)
     return (<Marker
       key={Math.random().toString(36).substr(2, 9)}
       options={
@@ -32,8 +33,8 @@ export const MyMapComponent = withScriptjs(withGoogleMap((props: any) => {
   });
   return (
     <GoogleMap
-      defaultZoom={8}
-      defaultCenter={{ lat: -34.397, lng: 150.644 }}
+      defaultZoom={12}
+      defaultCenter={{ lat: 45.46416, lng: 9.19034 }}
     >
       { personsMarkers }
     </GoogleMap>

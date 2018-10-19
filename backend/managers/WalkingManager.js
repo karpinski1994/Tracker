@@ -13,18 +13,14 @@ class WalkingManager {
 
   move(person) {
     console.log(`steps: ${this.steps}, changeNo: ${this.changeNo}, localDirection: ${this.localDirection}`)
-    this.steps += 1;
-    person.direction = this.localDirection;
-    if(this.steps === this.changeNo) {
-      console.log('STEPS', this.steps)
-      this.localDirection = 0;
-      this.localDirection = this.getRandomInt(0, 360);
-      person.direction = this.localDirection;
-      this.changeNo = this.getRandomInt(5, 10);
-      this.steps = 0;
-    }
-    person.location.lat = Math.sin(Math.PI / 180 * person.direction) + person.location.lat;
-    person.location.lng = Math.cos(Math.PI / 180 * person.direction) + person.location.lng;
+    const r = 0.0015;
+    const a = 315;
+    person.direction = a;
+    const prvLat = person.location.lat;
+    person.location.lat = Math.cos(Math.PI / 180 * a) * r + prvLat;
+    const prvLng = person.location.lng;
+    person.location.lng = Math.sin(Math.PI / 180 * a) * r + prvLng;
+
   }
 
   moveAll(persons) {

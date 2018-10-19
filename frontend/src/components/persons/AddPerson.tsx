@@ -17,8 +17,8 @@ export class AddPerson extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       name: 'Krystyna Skarbek',
-      lat: '-34.644',
-      long: '150.600'
+      lat: '45.46416',
+      long: '9.19034'
     }
   }
 
@@ -52,7 +52,7 @@ export class AddPerson extends React.Component<IProps, IState> {
         lat: parseFloat(this.state.lat),
         lng: parseFloat(this.state.long)
       },
-      direction: this.getRandomInt(0, 360)
+      direction: 90
     });
     // this.setState({
     //   name: '',
