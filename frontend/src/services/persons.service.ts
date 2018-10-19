@@ -49,7 +49,6 @@ export class personsService {
     }
     this.persons = updPersons;
     this.notifyAll();
-
     htServ.addPerson(person);
   }
 

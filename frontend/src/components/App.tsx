@@ -21,18 +21,9 @@ export class App extends React.Component<IProps, IState> {
       persons: this.props.pServ.getPersons(),
     }
   }
+  walkingInterval: any = null;
   componentDidMount() {
     this.props.pServ.subscribe(this.update);
-    setInterval(() => {
-      fetch('http://localhost:3000/api/person/walking')
-      .then((response) => response.json())
-      .then(data =>  {
-          data.persons.forEach((p: IPerson) => console.log(p.direction));
-          this.setState({ persons: data.persons });
-        }
-      );
-    }, 2000);
-
   }
 
   person = {
@@ -49,9 +40,29 @@ export class App extends React.Component<IProps, IState> {
     this.setState({ persons: updPersons});
   }
 
+  setWalkingHandler = () => {
+    this.walkingInterval = setInterval(() => {
+      fetch('http://localhost:3000/api/person/mode/walking')
+      .then((response) => response.json())
+      .then(data =>  {
+          data.persons.forEach((p: IPerson) => console.log(p.direction));
+          this.setState({ persons: data.persons });
+        }
+      );
+    }, 500);
+  }
+
+  setStationaryHandler = () => {
+    clearInterval(this.walkingInterval);
+    fetch('http://localhost:3000/api/person/mode/stationary')
+      .then((response) => response.json())
+      .then(data =>  {
+          console.log(data);
+        }
+      );
+  }
 
   render() {
-
     return (
       <div className="app-container">
         <aside className="cockpit-container">
@@ -59,10 +70,12 @@ export class App extends React.Component<IProps, IState> {
           <AddPerson pServ={this.props.pServ}/>
         </aside>
         <main className="map-container">
+        <button onClick={() => this.setWalkingHandler()}>Walking</button>
+        <button onClick={() => this.setStationaryHandler()}>Stationary</button>
           <MyMapComponent
             googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
             loadingElement={<div style={{ height: `100%` }} />}
-            containerElement={<div style={{ height: `100%` }} />}
+            containerElement={<div style={{ height: `90%` }} />}
             mapElement={<div style={{ height: `100%` }} />}
             persons={this.state.persons}
           />

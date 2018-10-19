@@ -52,7 +52,7 @@ export class AddPerson extends React.Component<IProps, IState> {
         lat: parseFloat(this.state.lat),
         lng: parseFloat(this.state.long)
       },
-      direction: 90
+      direction: this.getRandomInt(0, 360)
     });
     // this.setState({
     //   name: '',

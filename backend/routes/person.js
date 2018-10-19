@@ -103,7 +103,7 @@ router.get('/delete/:id', (req, res, next) => {
 
 const walkingManager = new WalkingManager();
 
-router.get('/walking', (req, res, next) => {
+router.get('/mode/walking', (req, res, next) => {
 
   let personsData = {};
   // mozna try catcha wrabac
@@ -125,4 +125,13 @@ router.get('/walking', (req, res, next) => {
     res.status(404).json(personsData);
   }
 });
+
+router.get('/mode/stationary', (req, res, next) => {
+    const personsData = {
+      message: 'Mode: stationary.'
+    }
+    res.status(404).json(personsData);
+});
+
+
 module.exports = router;
