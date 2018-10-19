@@ -2,6 +2,8 @@
 
 class WalkingManager {
   constructor() {
+    this.steps = 0;
+    this.changeDistance = 20;
   }
 
   getRandomInt(min, max) {
@@ -14,7 +16,13 @@ class WalkingManager {
     person.location.lat = Math.cos(Math.PI / 180 * person.direction) * r + prvLat;
     const prvLng = person.location.lng;
     person.location.lng = Math.sin(Math.PI / 180 * person.direction) * r + prvLng;
-
+    this.steps += 1;
+    if (this.steps === this.changeDistance) {
+      person.direction = this.getRandomInt(0, 360);
+      console.log()
+      person.direction = this.getRandomInt(0, 360);
+      this.steps = 0;
+    }
   }
 
   moveAll(persons) {

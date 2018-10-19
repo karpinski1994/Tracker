@@ -16,7 +16,6 @@ export class httpService {
       referrer: "no-referrer", // no-referrer, *client
       body: JSON.stringify(person), // body data type must match "Content-Type" header
       })
-      .then(response => response.json())
   }
 
   getPersons() {
