@@ -108,28 +108,27 @@ const walkingManager = new WalkingManager();
 let timer;
 
 router.get('/mode/walking', (req, res, next) => {
-  timer = setInterval(function() {
-      console.log('Interval is running');
-  }, 1000);
   let personsData = {};
-  // mozna try catcha wrabac
-  if (fs.existsSync(filePath)) {
-    const rawPrevPersons = fs.readFileSync(filePath);
-    const persons = [...JSON.parse(rawPrevPersons)];
-    const newPersons = walkingManager.moveAll(persons);
-    personsData = {
-      message: 'Persons fetched successfully.',
-      persons: newPersons
-    };
-    fs.writeFile(filePath, JSON.stringify(persons), (err) => {
-      res.status(201).json(personsData);
-    });
-  } else {
-    personsData = {
-      message: 'File with persons doesn\'t exist.',
+  timer = setInterval(function() {
+    if (fs.existsSync(filePath)) {
+      const rawPrevPersons = fs.readFileSync(filePath);
+      const persons = [...JSON.parse(rawPrevPersons)];
+      const newPersons = walkingManager.moveAll(persons);
+      personsData = {
+        message: 'Persons fetched successfully.',
+        persons: newPersons
+      };
+      console.log(personsData);
+    } else {
+      personsData = {
+        message: 'File with persons doesn\'t exist.',
+      }
     }
-    res.status(404).json(personsData);
-  }
+  }, 1000);
+  fs.writeFile(filePath, JSON.stringify(personsData.persons), (err) => {
+    res.status(201).json(personsData);
+  });
+  // mozna try catcha wrabac
 });
 
 
