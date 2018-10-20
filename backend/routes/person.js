@@ -104,43 +104,63 @@ router.get('/delete/:id', (req, res, next) => {
 const walkingManager = new WalkingManager();
 
 
+// router.get('/mode/walking', (req, res, next) => {
+//   let personsData = {};
+
+//      if (fs.existsSync(filePath)) {
+//        const rawPrevPersons = fs.readFileSync(filePath);
+//        const persons = [...JSON.parse(rawPrevPersons)];
+//        const newPersons = walkingManager.moveAll(persons);
+//        personsData = {
+//          message: 'Persons fetched successfully.',
+//          persons: newPersons
+//        };
+//        console.log(personsData);
+//      } else {
+//        personsData = {
+//          message: 'File with persons doesn\'t exist.',
+//        }
+//      }
+
+//   fs.writeFile(filePath, JSON.stringify(personsData.persons), (err) => {
+//     res.status(201).json(personsData);
+//   });
+//   // mozna try catcha wrabac
+// });
+
 
 let timer;
-
+let isTimerSet = false;
+const rawPrevPersons = fs.readFileSync(filePath);
+const persons = [...JSON.parse(rawPrevPersons)];
+let newPersons = persons;
+let personsData;
 router.get('/mode/walking', (req, res, next) => {
-  let personsData = {};
-  timer = setInterval(function() {
-    if (fs.existsSync(filePath)) {
-      const rawPrevPersons = fs.readFileSync(filePath);
-      const persons = [...JSON.parse(rawPrevPersons)];
-      const newPersons = walkingManager.moveAll(persons);
+  newPersons = persons;
+  personsData = {
+    message: 'Persons fetched successfully.',
+    persons: newPersons
+  };
+
+  if(!isTimerSet) {
+    timer = setInterval(() => {
+      newPersons = walkingManager.moveAll(persons);
       personsData = {
         message: 'Persons fetched successfully.',
         persons: newPersons
       };
-      console.log(personsData);
-    } else {
-      personsData = {
-        message: 'File with persons doesn\'t exist.',
-      }
-    }
-  }, 1000);
-  fs.writeFile(filePath, JSON.stringify(personsData.persons), (err) => {
-    res.status(201).json(personsData);
-  });
-  // mozna try catcha wrabac
+      console.log('walking personsData', personsData.persons)
+    }, 1000);
+    isTimerSet = true;
+    console.log('if but after timer: ', personsData.persons)
+  }
+  console.log('AFTER walking personsData', personsData.persons)
+  res.status(201).json(personsData);
 });
-
-
-
 
 router.get('/mode/stationary', (req, res, next) => {
+  isTimerSet = false;
   clearInterval(timer);
-    const personsData = {
-      message: 'Mode: stationary.'
-    }
-    res.status(404).json(personsData);
+  console.log('stop')
 });
-
-
 module.exports = router;

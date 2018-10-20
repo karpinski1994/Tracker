@@ -49,14 +49,11 @@ export class App extends React.Component<IProps, IState> {
         }
       );
     }, 2000);
-  }
+  };
 
   setStationaryHandler = () => {
-
-    fetch('http://localhost:3000/api/person/mode/stationary')
-    .then(data => data.json())
-    .then(message => console.log(message));
     clearInterval(this.walkingInterval);
+    fetch('http://localhost:3000/api/person/mode/stationary');
   }
 
   render() {
