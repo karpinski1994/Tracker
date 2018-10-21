@@ -1,8 +1,9 @@
 const express = require('express');
 const parser = require('body-parser');
 const app = express();
+app.io = require('socket.io')();
 
-const personRoutes = require('./routes/person.js');
+const personRoutes = require('./routes/person.js')(app.io);
 
 app.use(parser.json());
 app.use(parser.urlencoded({extended: false}));
@@ -16,5 +17,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/person/', personRoutes);
+
+
 
 module.exports = app;

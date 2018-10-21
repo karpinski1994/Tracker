@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { App } from './App';
 
-
 import { personsService } from '../services/persons.service';
 interface IState {
   loaded: boolean;

@@ -6,6 +6,8 @@ import { PersonsList } from './persons/PersonsList';
 import { AddPerson } from './persons/AddPerson';
 import { MyMapComponent } from './map/Map';
 
+import * as socketIOClient from 'socket.io-client';
+
 interface IState {
   persons: Array<IPerson>,
 }
@@ -24,6 +26,10 @@ export class App extends React.Component<IProps, IState> {
   walkingInterval: any = null;
   componentDidMount() {
     this.props.pServ.subscribe(this.update);
+    const socket = socketIOClient('http://localhost:3000/');
+    socket.on('walking', (data: any) => {
+      console.log(data);
+    });
   }
 
   person = {
@@ -35,6 +41,15 @@ export class App extends React.Component<IProps, IState> {
     },
     direction: 0
   }
+
+  send = () => {
+    const socket = socketIOClient('http://localhost:3000/');
+    socket.emit('persons', {
+      message: 'added persons (socket)',
+      persons: this.state.persons
+    });
+  }
+
 
   update = (updPersons: IPerson[]) => {
     this.setState({ persons: updPersons});
@@ -64,6 +79,7 @@ export class App extends React.Component<IProps, IState> {
           <AddPerson pServ={this.props.pServ}/>
         </aside>
         <main className="map-container">
+          <button onClick={() => this.send()}>TEST SEND</button>
           <button onClick={() => this.setWalkingHandler()}>Walking</button>
           <button onClick={() => this.setStationaryHandler()}>Stationary</button>
           <MyMapComponent

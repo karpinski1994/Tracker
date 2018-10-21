@@ -128,7 +128,6 @@ const walkingManager = new WalkingManager();
 //   // mozna try catcha wrabac
 // });
 
-
 let timer;
 let isTimerSet = false;
 const rawPrevPersons = fs.readFileSync(filePath);
@@ -149,12 +148,9 @@ router.get('/mode/walking', (req, res, next) => {
         message: 'Persons fetched successfully.',
         persons: newPersons
       };
-      console.log('walking personsData', personsData.persons)
     }, 1000);
     isTimerSet = true;
-    console.log('if but after timer: ', personsData.persons)
   }
-  console.log('AFTER walking personsData', personsData.persons)
   res.status(201).json(personsData);
 });
 
@@ -163,4 +159,18 @@ router.get('/mode/stationary', (req, res, next) => {
   clearInterval(timer);
   console.log('stop')
 });
-module.exports = router;
+
+module.exports = (io) => {
+  //Socket.IO
+  io.on('connection', (socket) => {
+    console.log('User has connected to persons');
+    //ON Events
+    socket.on('persons', (data) =>{
+      console.log(data)
+      io.sockets.emit('persons', newPersons);
+    });
+
+    //End ON Events
+  });
+  return router;
+};
