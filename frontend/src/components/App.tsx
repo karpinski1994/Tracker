@@ -26,9 +26,10 @@ export class App extends React.Component<IProps, IState> {
   walkingInterval: any = null;
   componentDidMount() {
     this.props.pServ.subscribe(this.update);
-    const socket = socketIOClient('http://localhost:3000/');
-    socket.on('walking', (data: any) => {
+    const socket = socketIOClient('http://localhost:3000');
+    socket.on("persons", (data: any) => {
       console.log(data);
+      this.setState({ persons: data })
     });
   }
 
@@ -43,10 +44,18 @@ export class App extends React.Component<IProps, IState> {
   }
 
   send = () => {
-    const socket = socketIOClient('http://localhost:3000/');
+    const socket = socketIOClient('http://localhost:3000/api/person/mode/walking');
     socket.emit('persons', {
       message: 'added persons (socket)',
-      persons: this.state.persons
+      persons: [{
+        id: '#324334',
+        name: 'Ktostam',
+        location: {
+          lat: 35,
+          lng: 45,
+        },
+        direction: 45
+      }]
     });
   }
 
@@ -56,18 +65,20 @@ export class App extends React.Component<IProps, IState> {
   }
 
   setWalkingHandler = () => {
-    this.walkingInterval = setInterval(() => {
-      fetch('http://localhost:3000/api/person/mode/walking')
-      .then((response) => response.json())
-      .then(data =>  {
-          this.setState({ persons: data.persons });
-        }
-      );
-    }, 2000);
+    // this.walkingInterval = setInterval(() => {
+    //   fetch('http://localhost:3000/api/person/mode/walking')
+    //   .then((response) => response.json())
+    //   .then(data =>  {
+    //       this.setState({ persons: data.persons });
+    //     }
+    //   );
+    // }, 2000);
+
+    fetch('http://localhost:3000/api/person/mode/walking')
   };
 
   setStationaryHandler = () => {
-    clearInterval(this.walkingInterval);
+    // clearInterval(this.walkingInterval);
     fetch('http://localhost:3000/api/person/mode/stationary');
   }
 

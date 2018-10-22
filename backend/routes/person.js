@@ -134,43 +134,50 @@ const rawPrevPersons = fs.readFileSync(filePath);
 const persons = [...JSON.parse(rawPrevPersons)];
 let newPersons = persons;
 let personsData;
-router.get('/mode/walking', (req, res, next) => {
-  newPersons = persons;
-  personsData = {
-    message: 'Persons fetched successfully.',
-    persons: newPersons
-  };
 
-  if(!isTimerSet) {
-    timer = setInterval(() => {
-      newPersons = walkingManager.moveAll(persons);
-      personsData = {
-        message: 'Persons fetched successfully.',
-        persons: newPersons
-      };
-    }, 1000);
-    isTimerSet = true;
-  }
-  res.status(201).json(personsData);
-});
-
-router.get('/mode/stationary', (req, res, next) => {
-  isTimerSet = false;
-  clearInterval(timer);
-  console.log('stop')
-});
 
 module.exports = (io) => {
-  //Socket.IO
-  io.on('connection', (socket) => {
-    console.log('User has connected to persons');
-    //ON Events
-    socket.on('persons', (data) =>{
-      console.log(data)
-      io.sockets.emit('persons', newPersons);
-    });
 
-    //End ON Events
+  router.get('/mode/walking', (req, res, next) => {
+    newPersons = persons;
+    personsData = {
+      message: 'Persons fetched successfully.',
+      persons: newPersons
+    };
+
+    if(!isTimerSet) {
+      timer = setInterval(() => {
+        newPersons = walkingManager.moveAll(persons);
+        personsData = {
+          message: 'Persons fetched successfully.',
+          persons: newPersons
+        };
+        io.sockets.emit('persons', newPersons);
+      }, 1000);
+
+      isTimerSet = true;
+    }
+
+    res.status(201).json(personsData);
+  })
+
+  router.get('/mode/stationary', (req, res, next) => {
+    isTimerSet = false;
+    clearInterval(timer);
+    console.log('stop')
   });
+
+  // io.on('connection', (socket) => {
+  //   console.log('User has connected to persons from BOTTOM');
+  //   //ON Events
+  //   socket.on('persons', (persons) =>{
+  //       console.log('bla')
+  //       io.sockets.emit('persons', 'costam');
+  //     console.log(persons)
+  //     // io.sockets.emit('persons', newPersons);
+  //   });
+
+  //   //End ON Events
+  // });
   return router;
 };
