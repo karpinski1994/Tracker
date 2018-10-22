@@ -12,6 +12,16 @@ getRandomInt = (min, max) => {
   return Math.random() * (max - min) + min;
 }
 
+
+const walkingManager = new WalkingManager();
+
+
+
+
+module.exports = (io) => {
+  let timer;
+
+
 router.post('/add', (req, res, next) => {
   const person = req.body;
   let curPersons = [];
@@ -33,6 +43,7 @@ router.post('/add', (req, res, next) => {
       message: 'Person added successfully.',
       persons: curPersons
     });
+    io.sockets.emit('persons', curPersons);
   });
 });
 
@@ -46,7 +57,9 @@ router.get('/list', (req, res, next) => {
       message: 'Persons fetched successfully.',
       persons: persons
     };
+
     res.status(201).json(personsData);
+    io.sockets.emit('persons', personsData.persons);
   } else {
     personsData = {
       message: 'File with persons doesn\'t exist.',
@@ -67,7 +80,9 @@ router.get('/get/:id', (req, res, next) => {
       message: 'Person fetched successfully.',
       person: person
     };
+
     res.status(201).json(personData);
+    io.sockets.emit('persons', personsData.persons);
   } else {
     personData = {
       message: 'File with persons doesn\'t exist.',
@@ -78,8 +93,7 @@ router.get('/get/:id', (req, res, next) => {
 
 router.get('/delete/:id', (req, res, next) => {
   let personsData = {};
-  const personId = parseInt(req.params.id);
-  // mozna try catcha wrabac
+  const personId = req.params.id;
   if (fs.existsSync(filePath)) {
     const rawPersons = fs.readFileSync(filePath);
     const persons = [...JSON.parse(rawPersons)];
@@ -91,6 +105,7 @@ router.get('/delete/:id', (req, res, next) => {
     };
     fs.writeFile(filePath, JSON.stringify(persons), (err) => {
       res.status(201).json(personsData);
+      io.sockets.emit('persons', personsData.persons);
     });
   }
   else {
@@ -100,64 +115,34 @@ router.get('/delete/:id', (req, res, next) => {
     res.status(404).json(personsData);
   }
 });
-
-const walkingManager = new WalkingManager();
-
-
-// router.get('/mode/walking', (req, res, next) => {
-//   let personsData = {};
-
-//      if (fs.existsSync(filePath)) {
-//        const rawPrevPersons = fs.readFileSync(filePath);
-//        const persons = [...JSON.parse(rawPrevPersons)];
-//        const newPersons = walkingManager.moveAll(persons);
-//        personsData = {
-//          message: 'Persons fetched successfully.',
-//          persons: newPersons
-//        };
-//        console.log(personsData);
-//      } else {
-//        personsData = {
-//          message: 'File with persons doesn\'t exist.',
-//        }
-//      }
-
-//   fs.writeFile(filePath, JSON.stringify(personsData.persons), (err) => {
-//     res.status(201).json(personsData);
-//   });
-//   // mozna try catcha wrabac
-// });
-
-let timer;
-let isTimerSet = false;
-const rawPrevPersons = fs.readFileSync(filePath);
-const persons = [...JSON.parse(rawPrevPersons)];
-let newPersons = persons;
-let personsData;
-
-
-module.exports = (io) => {
-
   router.get('/mode/walking', (req, res, next) => {
-    newPersons = persons;
-    personsData = {
-      message: 'Persons fetched successfully.',
-      persons: newPersons
-    };
+
+    let isTimerSet = false;
+    let personsData;
 
     if(!isTimerSet) {
       timer = setInterval(() => {
+        const rawPrevPersons = fs.readFileSync(filePath);
+        const persons = [...JSON.parse(rawPrevPersons)];
+        let newPersons = persons;
+        newPersons = persons;
+        personsData = {
+          message: 'Persons fetched successfully.',
+          persons: newPersons
+        };
         newPersons = walkingManager.moveAll(persons);
         personsData = {
           message: 'Persons fetched successfully.',
           persons: newPersons
         };
-        io.sockets.emit('persons', newPersons);
+        fs.writeFile(filePath, JSON.stringify(newPersons), (err) => {
+          io.sockets.emit('persons', newPersons);
+        });
+
       }, 1000);
 
       isTimerSet = true;
     }
-
     res.status(201).json(personsData);
   })
 
@@ -166,18 +151,5 @@ module.exports = (io) => {
     clearInterval(timer);
     console.log('stop')
   });
-
-  // io.on('connection', (socket) => {
-  //   console.log('User has connected to persons from BOTTOM');
-  //   //ON Events
-  //   socket.on('persons', (persons) =>{
-  //       console.log('bla')
-  //       io.sockets.emit('persons', 'costam');
-  //     console.log(persons)
-  //     // io.sockets.emit('persons', newPersons);
-  //   });
-
-  //   //End ON Events
-  // });
   return router;
 };

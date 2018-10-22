@@ -18,7 +18,8 @@ export class PersonsList extends React.Component<IProps, {}> {
 
   render() {
     const persons = [...this.props.persons];
-    const personsMarkup = persons.map((p, index) => {
+    console.log("PERSONS LIST: persons render", persons)
+    const personsMarkup = persons.map(p => {
       return (
         <div key={Math.random().toString(36).substr(2, 9)}>
           {p.name}

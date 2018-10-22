@@ -25,10 +25,8 @@ export class App extends React.Component<IProps, IState> {
   }
   walkingInterval: any = null;
   componentDidMount() {
-    this.props.pServ.subscribe(this.update);
     const socket = socketIOClient('http://localhost:3000');
     socket.on("persons", (data: any) => {
-      console.log(data);
       this.setState({ persons: data })
     });
   }
@@ -43,42 +41,11 @@ export class App extends React.Component<IProps, IState> {
     direction: 0
   }
 
-  send = () => {
-    const socket = socketIOClient('http://localhost:3000/api/person/mode/walking');
-    socket.emit('persons', {
-      message: 'added persons (socket)',
-      persons: [{
-        id: '#324334',
-        name: 'Ktostam',
-        location: {
-          lat: 35,
-          lng: 45,
-        },
-        direction: 45
-      }]
-    });
-  }
-
-
-  update = (updPersons: IPerson[]) => {
-    this.setState({ persons: updPersons});
-  }
-
   setWalkingHandler = () => {
-    // this.walkingInterval = setInterval(() => {
-    //   fetch('http://localhost:3000/api/person/mode/walking')
-    //   .then((response) => response.json())
-    //   .then(data =>  {
-    //       this.setState({ persons: data.persons });
-    //     }
-    //   );
-    // }, 2000);
-
-    fetch('http://localhost:3000/api/person/mode/walking')
+    fetch('http://localhost:3000/api/person/mode/walking');
   };
 
   setStationaryHandler = () => {
-    // clearInterval(this.walkingInterval);
     fetch('http://localhost:3000/api/person/mode/stationary');
   }
 
@@ -90,7 +57,6 @@ export class App extends React.Component<IProps, IState> {
           <AddPerson pServ={this.props.pServ}/>
         </aside>
         <main className="map-container">
-          <button onClick={() => this.send()}>TEST SEND</button>
           <button onClick={() => this.setWalkingHandler()}>Walking</button>
           <button onClick={() => this.setStationaryHandler()}>Stationary</button>
           <MyMapComponent

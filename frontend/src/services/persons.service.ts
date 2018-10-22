@@ -63,8 +63,11 @@ export class personsService {
     let persons;
     if (this.persons.length > 0) {
       persons = [...this.persons];
-      const newPersons = persons.filter(p => p.id !== id);
-      this.persons = newPersons;
+      const removedPersonIndex = persons.findIndex(p => p.id === id);
+      persons.splice(removedPersonIndex, 1);
+
+      this.persons = persons;
+      console.log(this.persons);
       htServ.deletePerson(id);
     }
     this.notifyAll();
