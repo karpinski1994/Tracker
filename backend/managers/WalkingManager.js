@@ -3,7 +3,7 @@
 class WalkingManager {
   constructor() {
     this.steps = 0;
-    this.changeDistance = 20;
+    this.changeDistance = 5;
     this.stepDist = 0.0015;
   }
 

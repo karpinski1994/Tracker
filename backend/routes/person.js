@@ -118,35 +118,36 @@ router.get('/delete/:id', (req, res, next) => {
     let personsData;
 
     if(!isTimerSet) {
-      timer = setInterval(() => {
-        const rawPrevPersons = fs.readFileSync(filePath);
-        const persons = [...JSON.parse(rawPrevPersons)];
-        let newPersons = persons;
-        newPersons = persons;
-        personsData = {
-          message: 'Persons fetched successfully.',
-          persons: newPersons
-        };
-        newPersons = walkingManager.moveAll(persons);
-        personsData = {
-          message: 'Persons fetched successfully.',
-          persons: newPersons
-        };
-        fs.writeFile(filePath, JSON.stringify(newPersons), (err) => {
-          io.sockets.emit('persons', newPersons);
-        });
+      const rawPrevPersons = fs.readFileSync(filePath);
+      const persons = [...JSON.parse(rawPrevPersons)];
+      if(persons.length > 0) {
+        timer = setInterval(() => {
+          let newPersons = persons;
+          newPersons = persons;
+          personsData = {
+            message: 'Persons fetched successfully.',
+            persons: newPersons
+          };
+          newPersons = walkingManager.moveAll(persons);
+          personsData = {
+            message: 'Persons fetched successfully.',
+            persons: newPersons
+          };
+          fs.writeFile(filePath, JSON.stringify(newPersons), (err) => {
+            io.sockets.emit('persons', newPersons);
+          });
 
-      }, 1000);
-
+        }, 1000);
+      }
       isTimerSet = true;
-    }
+
+  }
     res.status(201).json(personsData);
   })
 
   router.get('/mode/stationary', (req, res, next) => {
     isTimerSet = false;
     clearInterval(timer);
-    console.log('stop')
   });
   return router;
 };
