@@ -26,7 +26,6 @@ router.post('/add', (req, res, next) => {
   const person = req.body;
   let curPersons = [];
   let prevPersons = [];
-  // mozna try catcha wrabac
   if (fs.existsSync(filePath)) {
     const rawPrevPersons = fs.readFileSync(filePath);
     prevPersons = [...JSON.parse(rawPrevPersons)];
@@ -49,7 +48,6 @@ router.post('/add', (req, res, next) => {
 
 router.get('/list', (req, res, next) => {
   let personsData = {};
-  // mozna try catcha wrabac
   if (fs.existsSync(filePath)) {
     const rawPrevPersons = fs.readFileSync(filePath);
     const persons = [...JSON.parse(rawPrevPersons)];
@@ -71,7 +69,6 @@ router.get('/list', (req, res, next) => {
 router.get('/get/:id', (req, res, next) => {
   let personData = {};
   const personId = req.params.id;
-  // mozna try catcha wrabac
   if (fs.existsSync(filePath)) {
     const rawPersons = fs.readFileSync(filePath);
     const persons = [...JSON.parse(rawPersons)];

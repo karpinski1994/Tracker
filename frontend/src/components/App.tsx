@@ -23,11 +23,10 @@ export class App extends React.Component<IProps, IState> {
       persons: this.props.pServ.getPersons(),
     }
   }
-  walkingInterval: any = null;
   componentDidMount() {
     const socket = socketIOClient('http://localhost:3000');
-    socket.on("persons", (data: any) => {
-      this.setState({ persons: data })
+    socket.on("persons", (persons: IPerson[]) => {
+      this.setState({ persons: persons })
     });
   }
 
