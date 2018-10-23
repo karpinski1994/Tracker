@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { IPerson } from '../../models/IPerson';
-
 interface IState {
   name: string;
   long: string;
@@ -11,11 +9,11 @@ interface IProps {
   pServ: any,
 }
 
-
 export class AddPerson extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
+      // temporarily for tests purpose
       name: '',
       lat: '51.509865',
       long: '-0.118092'

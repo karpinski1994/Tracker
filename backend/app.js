@@ -18,6 +18,4 @@ app.use((req, res, next) => {
 
 app.use('/api/person/', personRoutes);
 
-
-
 module.exports = app;

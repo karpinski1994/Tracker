@@ -29,8 +29,18 @@ export class httpService {
   }
 
   deletePerson(id:string) {
-    fetch(`http://localhost:3000/api/person/delete/${id}`)
+    fetch(`http://localhost:3000/api/person/delete/${id}`, {method: 'DELETE'})
       .then((response) => response.json())
+  }
+
+  activateWalking() {
+    fetch('http://localhost:3000/api/person/mode/walking',
+    {method: 'PUT'});
+  }
+
+  disactivateWalking() {
+    fetch('http://localhost:3000/api/person/mode/stationary',
+    {method: 'PUT'});
   }
 
 }

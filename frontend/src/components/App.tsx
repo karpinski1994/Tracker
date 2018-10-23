@@ -17,12 +17,14 @@ interface IProps {
 }
 
 export class App extends React.Component<IProps, IState> {
+
   constructor(props: IProps) {
     super(props);
     this.state = {
       persons: this.props.pServ.getPersons(),
     }
   }
+
   componentDidMount() {
     const socket = socketIOClient('http://localhost:3000');
     socket.on("persons", (persons: IPerson[]) => {
@@ -41,11 +43,11 @@ export class App extends React.Component<IProps, IState> {
   }
 
   setWalkingHandler = () => {
-    fetch('http://localhost:3000/api/person/mode/walking');
+    this.props.pServ.setWalking();
   };
 
   setStationaryHandler = () => {
-    fetch('http://localhost:3000/api/person/mode/stationary');
+    this.props.pServ.unsetWalking();
   }
 
   render() {

@@ -6,6 +6,7 @@ const areObjEqual = require('../utils/areObjEqual');
 const htServ = new httpService();
 
 export class personsService {
+
   pServ: personsService;
   htServ = new httpService();
   persons: Array<IPerson> = [];
@@ -71,5 +72,13 @@ export class personsService {
       htServ.deletePerson(id);
     }
     this.notifyAll();
+  }
+
+  setWalking() {
+    this.htServ.activateWalking();
+  }
+
+  unsetWalking() {
+    this.htServ.disactivateWalking();
   }
 }

@@ -13,7 +13,7 @@ export class PersonsList extends React.Component<IProps, {}> {
   }
 
   onDelPersonHandler = (id: string) => {
-    this.props.pServ.deletePerson(id)
+    this.props.pServ.deletePerson(id);
   }
 
   render() {
