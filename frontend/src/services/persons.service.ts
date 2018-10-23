@@ -5,6 +5,13 @@ const areObjEqual = require('../utils/areObjEqual');
 
 const htServ = new httpService();
 
+const Inject = (target: any) => {
+  // bierze nazwe serwisu
+  // bierze obiekt na podstawie nazwy
+  // "opakowuje" te klase tym serwisem od ktorego zalezy
+}
+
+@Inject('httpService')
 export class personsService {
 
   pServ: personsService;

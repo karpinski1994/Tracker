@@ -128,7 +128,7 @@ module.exports = (io) => {
     }
   });
 
-  router.put('/mode/walking', (req, res) => {
+  router.put('/mode/walking', () => {
     let isTimerSet = false;
     let personsData;
     if(!isTimerSet) {

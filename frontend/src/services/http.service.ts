@@ -1,5 +1,10 @@
 import { IPerson } from '../models/IPerson';
 
+const Injectable = (target: any) => {
+  // bierze to wrzuca do tablicy injectables w kontenerze
+}
+
+@Injectable
 export class httpService {
 
   addPerson(person: IPerson) {

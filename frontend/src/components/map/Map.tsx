@@ -30,12 +30,13 @@ export const MyMapComponent = withScriptjs(withGoogleMap((props: any) => {
       }
       />)
   });
-  return (
-    <GoogleMap
-      defaultZoom={12}
-      defaultCenter={{ lat: 51.509865, lng: -0.118092 }}
-    >
-      { personsMarkers }
-    </GoogleMap>
-  );
+    return (
+      <GoogleMap
+        defaultZoom={12}
+        defaultCenter={{ lat: 51.509865, lng: -0.118092 }}
+      >
+        { personsMarkers }
+      </GoogleMap>
+    );
+  }
 ));
