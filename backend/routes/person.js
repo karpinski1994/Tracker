@@ -130,7 +130,6 @@ module.exports = (io) => {
 
   router.put('/mode/walking', () => {
     let isTimerSet = false;
-    let personsData;
     if(!isTimerSet) {
       timer = interval(() => {
         const rawPrevPersons = fs.readFileSync(filePath);

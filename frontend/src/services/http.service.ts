@@ -1,8 +1,5 @@
 import { IPerson } from '../models/IPerson';
-
-const Injectable = (target: any) => {
-  // bierze to wrzuca do tablicy injectables w kontenerze
-}
+import { Injectable } from '../di/DIContainer';
 
 @Injectable
 export class httpService {

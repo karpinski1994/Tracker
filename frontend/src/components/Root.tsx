@@ -2,17 +2,14 @@ import * as React from 'react';
 import { App } from './App';
 
 import { personsService } from '../services/persons.service';
-import { httpService } from '../services/http.service';
 
-import DIContainer from '../di/DIContainer';
-
-const dIContainer = new DIContainer();
-dIContainer.register(personsService);
-dIContainer.register(httpService);
+import { diContainer } from '../di/DIContainer';
 
 interface IState {
   loaded: boolean;
 }
+
+diContainer.initiate();
 
 export class Root extends React.Component<{}, IState> {
   pServ: personsService;
@@ -43,7 +40,7 @@ export class Root extends React.Component<{}, IState> {
       return <div>Loading...</div>;
     }
     return (
-      // pServ = {DIContainer.getDependencies()}
+      // pServ = {dIContainer.getDependencies()}
       <App pServ={this.pServ}/>
     );
   }

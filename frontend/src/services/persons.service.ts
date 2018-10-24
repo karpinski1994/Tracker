@@ -1,15 +1,10 @@
 import { IPerson } from '../models/IPerson';
 import { httpService } from './http.service';
+import { Inject } from '../di/DIContainer';
 
 const areObjEqual = require('../utils/areObjEqual');
 
-const htServ = new httpService();
 
-const Inject = (target: any) => {
-  // bierze nazwe serwisu
-  // bierze obiekt na podstawie nazwy
-  // "opakowuje" te klase tym serwisem od ktorego zalezy
-}
 
 @Inject('httpService')
 export class personsService {
@@ -31,7 +26,7 @@ export class personsService {
   }
 
   updatePersons() {
-    return htServ.getPersons()
+    return this.htServ.getPersons()
     .then(data => {
       if(data.persons) {
         this.persons = [...data.persons];
@@ -57,7 +52,7 @@ export class personsService {
     }
     this.persons = updPersons;
     this.notifyAll();
-    htServ.addPerson(person);
+    this.htServ.addPerson(person);
   }
 
   getPerson(id: string): IPerson {
@@ -76,7 +71,7 @@ export class personsService {
 
       this.persons = persons;
       console.log(this.persons);
-      htServ.deletePerson(id);
+      this.htServ.deletePerson(id);
     }
     this.notifyAll();
   }

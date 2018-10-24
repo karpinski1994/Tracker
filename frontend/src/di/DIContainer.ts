@@ -1,35 +1,67 @@
 
 interface Container {
-  services: Map<string, any>,
-  decorated: Array<any>,
-  instances: Array<any>,
+  registered: Map<string, any>,
 }
 
 class Container {
 
   constructor() {
-    this.services = new Map();
-    this.instances = [];
+    this.registered = new Map();
   }
 
-  register(service: any) {
-    this.services.set(`${service.name}`, service);
-    this.instantiateService(service.name);
-  }
-
-  instantiateService(name: string) {
-    const service = this.services.get(name);
-    this.instances = [...this.instances, new service()];
-    console.log(this.instances);
-    // jesli jest injectable to pierwszy
-  }
-
-  logAll() {
-    for (var [key, value] of this.services) {
-      console.log(`key:${key}======= value: ${value}`);
+  register(target: any, dependency?: string) {
+    if (dependency) {
+      const curTarget = this.registered.get(`${target.name}`);
+      if(curTarget) {
+        // jesli klasa juz jest to dodajemy do niej sama zaleznosc
+        if (curTarget.dependencies) {
+          // sprawdzamy czy juz ma jakies zaleznosci
+          curTarget.dependencies.push(dependency);
+        }
+        else {
+          curTarget.dependencies = [];
+          curTarget.dependencies.push(dependency);
+        }
+      } else {
+        // jesli nie ma klasy to dodajemy ja z zaleznoscia
+        this.registered.set(`${target.name}`, target);
+        const curTarget = this.registered.get(`${target.name}`);
+        curTarget.dependencies = [];
+        curTarget.dependencies.push(dependency);
+      }
+    } else {
+      this.registered.set(`${target.name}`, target);
     }
   }
 
+  initiate() {
+    this.registered.forEach((target: any) => {
+      let dependency;
+      console.log(target)
+      if(target.dependencies) {
+        target.dependencies.map((d: any) => {
+          dependency = this.registered.get(d);
+        });
+      }
+      target = new target(dependency);
+     })
+  }
+
+  getDependency(depName: string) {
+    return this.registered.get(depName);
+  }
 }
 
-export default Container;
+export const diContainer = new Container();
+
+export const Inject = (serviceName: any) => {
+  return (target: any) => {
+    diContainer.register(target, serviceName);
+    return target;
+  }
+};
+
+export const Injectable = (target: any) => {
+  diContainer.register(target);
+  return target;
+};
