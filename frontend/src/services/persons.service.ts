@@ -70,7 +70,6 @@ export class personsService {
       persons.splice(removedPersonIndex, 1);
 
       this.persons = persons;
-      console.log(this.persons);
       this.htServ.deletePerson(id);
     }
     this.notifyAll();

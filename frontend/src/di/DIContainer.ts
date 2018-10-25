@@ -1,60 +1,75 @@
+const areObjEqual = require('../utils/areObjEqual');
 
 interface Container {
-  registered: Map<string, any>,
-  instances: Map<string, any>,
+  registered: [];
+  instances: [];
 }
 
 class Container {
 
   constructor() {
-    this.registered = new Map();
-    this.instances = new Map();
+    this.registered = [];
+    this.instances = [];
+    this.solved = [];
   }
 
   register(target: any, dependency?: string) {
     if (dependency) {
-      const curTarget = this.registered.get(`${target.name}`);
+      const curTarget: any = this.registered.find(el => areObjEqual(el, target));
       if(curTarget) {
         // jesli klasa juz jest to dodajemy do niej sama zaleznosc
         if (curTarget.dependencies) {
           // sprawdzamy czy juz ma jakies zaleznosci
-          curTarget.dependencies.push(dependency);
+          curTarget.dependencies.unshift(dependency);
         }
         else {
           curTarget.dependencies = [];
-          curTarget.dependencies.push(dependency);
+          curTarget.dependencies.unshift(dependency);
         }
       } else {
         // jesli nie ma klasy to dodajemy ja z zaleznoscia
-        this.registered.set(`${target.name}`, target);
-        const curTarget = this.registered.get(`${target.name}`);
+        this.registered.unshift(target);
+        const curTarget: any = this.registered.find(el => areObjEqual(el, target));
         curTarget.dependencies = [];
-        curTarget.dependencies.push(dependency);
+        curTarget.dependencies.unshift(dependency);
       }
     } else {
-      this.registered.set(`${target.name}`, target);
+      this.registered.unshift(target);
     }
+
+
   }
 
   initiate() {
-    this.registered.forEach((target: any) => {
-      let dependency;
-      console.log(target)
-      if(target.dependencies) {
-        target.dependencies.map((d: any) => {
-          dependency = this.registered.get(d);
-          console.log('DEPENDENCY', dependency)
-          this.instances.set(dependency.name, new dependency());
-        });
-      }
-      target = new target(dependency);
-     })
-     return this.instances;
+
+    this.registered.map(registredElemenet => {
+      this.hasDeps(registredElemenet)
+
+      // if (this.hasDeps(registredElemenet)) {
+      //   let dependency;
+      //   registredElemenet.dependencies.forEach(depName => {
+      //     dependency = this.registered.find(dep => dep.name === depName);
+      //     this.instances.push(new dependency());
+      //   });
+      //   console.log(dependency)
+      //   console.log('this.instances', this.instances)
+      // }
+    });
   }
 
-  getDependency(depName: string) {
-    return this.registered.get(depName);
+  hasDeps(element) {
+    console.log('element', element.name)
+    if(element.dependencies) {
+      element.dependencies.forEach(depName => {
+        const dependency = this.registered.find(d => d.name === depName)
+        console.log('dep', dependency)
+        this.hasDeps(dependency)
+      });
+    } else {
+      console.log('bla')
+    }
   }
+
 }
 
 export const diContainer = new Container();
