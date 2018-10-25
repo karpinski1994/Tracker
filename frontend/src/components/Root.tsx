@@ -2,6 +2,7 @@ import * as React from 'react';
 import { App } from './App';
 
 import { personsService } from '../services/persons.service';
+import '../services/http.service';
 
 import { diContainer } from '../di/DIContainer';
 
@@ -9,7 +10,9 @@ interface IState {
   loaded: boolean;
 }
 
-diContainer.initiate();
+const instances = diContainer.initiate();
+
+console.log(instances.get('httpService'))
 
 export class Root extends React.Component<{}, IState> {
   pServ: personsService;
@@ -19,7 +22,7 @@ export class Root extends React.Component<{}, IState> {
     this.state = {
       loaded: false,
     };
-    this.pServ = new personsService();
+    this.pServ = new personsService(instances.get('httpService'));
   }
 
   componentDidMount() {

@@ -1,12 +1,14 @@
 
 interface Container {
   registered: Map<string, any>,
+  instances: Map<string, any>,
 }
 
 class Container {
 
   constructor() {
     this.registered = new Map();
+    this.instances = new Map();
   }
 
   register(target: any, dependency?: string) {
@@ -41,10 +43,13 @@ class Container {
       if(target.dependencies) {
         target.dependencies.map((d: any) => {
           dependency = this.registered.get(d);
+          console.log('DEPENDENCY', dependency)
+          this.instances.set(dependency.name, new dependency());
         });
       }
       target = new target(dependency);
      })
+     return this.instances;
   }
 
   getDependency(depName: string) {

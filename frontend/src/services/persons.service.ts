@@ -1,5 +1,4 @@
 import { IPerson } from '../models/IPerson';
-import { httpService } from './http.service';
 import { Inject } from '../di/DIContainer';
 
 const areObjEqual = require('../utils/areObjEqual');
@@ -9,8 +8,9 @@ const areObjEqual = require('../utils/areObjEqual');
 @Inject('httpService')
 export class personsService {
 
+  constructor(private htServ: any){}
+
   pServ: personsService;
-  htServ = new httpService();
   persons: Array<IPerson> = [];
   observerList: Array<any> = [];
 
