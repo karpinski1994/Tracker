@@ -1,8 +1,10 @@
+import { element } from 'protractor';
 const areObjEqual = require('../utils/areObjEqual');
 
 interface Container {
   registered: [];
   instances: [];
+  solved: [];
 }
 
 class Container {
@@ -41,33 +43,54 @@ class Container {
   }
 
   initiate() {
-
     this.registered.map(registredElemenet => {
-      this.hasDeps(registredElemenet)
-
-      // if (this.hasDeps(registredElemenet)) {
-      //   let dependency;
-      //   registredElemenet.dependencies.forEach(depName => {
-      //     dependency = this.registered.find(dep => dep.name === depName);
-      //     this.instances.push(new dependency());
-      //   });
-      //   console.log(dependency)
-      //   console.log('this.instances', this.instances)
-      // }
+      this.initDeps(registredElemenet)
+        console.log(this.solved)
     });
+    
   }
 
-  hasDeps(element) {
-    console.log('element', element.name)
-    if(element.dependencies) {
-      element.dependencies.forEach(depName => {
-        const dependency = this.registered.find(d => d.name === depName)
-        console.log('dep', dependency)
-        this.hasDeps(dependency)
+
+  initDeps(element:any) {
+    const prevEl = {...element};
+    this.hasDeps(element, prevEl);
+  }
+  //1 wsadzamy root
+  //7 wsadzamy pServ
+  hasDeps(element: any, prevEl?: any) {
+    let curElement = element;
+    //2 root ma zaleznosci wiec idziemy dalej
+    //8 pServ ma zaleznosci wiec dalej
+      if (curElement.dependencies) {
+      //3 pierwsza zaleznosc root to pServ
+      //9 zaleznosc pServ to hServ
+          curElement.dependencies.forEach((depName :string) => {
+        //4 bierzemy pServ
+        //10 bierzemy hServ
+        const dependency = this.registered.find(d => d.name === depName);
+        // * sprawdzamy czy pServ ma instancje
+        //5 sprawdzamy czy pServ ma zaleznosci
+        //6 ma wiec idziemy do kroku 1
+        //11 sprawdzamy czy hServ ma zaleznosci - nie ma wiec return i idziemy dalej
+        //12 sprawdzamy czy hServ ma instancje
+        let instanceData = this.instances.find(i => i.name === depName);
+        //13 ma wiec tworzymy go z zaleznoscia
+        if (instanceData) {
+          const elWithDep = new curElement(instanceData.instance);
+          elWithDep.solved = true;
+          this.solved.push(elWithDep);
+          this.hasDeps(prevEl);
+        } else {
+          this.instantiate(dependency);
+        }
       });
     } else {
-      console.log('bla')
+        return
     }
+  }
+
+  instantiate(dependency: any) {
+      this.instances.push({ name: dependency.name, instance: new dependency()});
   }
 
 }
