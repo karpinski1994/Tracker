@@ -3,12 +3,11 @@ import { Inject } from '../di/DIContainer';
 
 const areObjEqual = require('../utils/areObjEqual');
 
-
-
 @Inject('httpService')
+@Inject('helperService')
 export class personsService {
 
-  constructor(private htServ: any){}
+  constructor(private htServ: any, private helperService: any){}
 
   pServ: personsService;
   persons: Array<IPerson> = [];

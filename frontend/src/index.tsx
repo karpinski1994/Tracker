@@ -6,12 +6,18 @@ import registerServiceWorker from './registerServiceWorker';
 
 import '../src/services/persons.service';
 import '../src/services/http.service';
+import '../src/services/helper.service';
+import '../src/services/utils.service';
 
 import { diContainer } from '../src/di/DIContainer';
-const instances = diContainer.initiate();
+diContainer.initiate();
 
-// console.log(instances)
 
-const root = document.querySelector('#root');
-ReactDOM.render(<Root/>, root);
-registerServiceWorker();
+/*
+if(loaded) {
+  const root = document.querySelector('#root');
+  ReactDOM.render(<Root/>, root);
+  registerServiceWorker();
+}
+
+*/

@@ -1,97 +1,74 @@
 const areObjEqual = require('../utils/areObjEqual');
 
 interface Container {
-  registered: [];
-  instances: [];
-  solved: [];
+  queue: Array<object>;
+  instances: Array<object>;
+  solved: Array<object>;
 }
 
 class Container {
 
   constructor() {
-    this.registered = [];
-    this.instances = [];
+    this.queue = [];
+    this.classes = [];
     this.solved = [];
   }
 
-  register(target: any, dependency?: string) {
-    if (dependency) {
-      const curTarget: any = this.registered.find(el => areObjEqual(el, target));
-      if(curTarget) {
-        // jesli klasa juz jest to dodajemy do niej sama zaleznosc
-        if (curTarget.dependencies) {
-          // sprawdzamy czy juz ma jakies zaleznosci
-          curTarget.dependencies.unshift(dependency);
-        }
-        else {
-          curTarget.dependencies = [];
-          curTarget.dependencies.unshift(dependency);
-        }
-      } else {
-        // jesli nie ma klasy to dodajemy ja z zaleznoscia
-        this.registered.unshift(target);
-        const curTarget: any = this.registered.find(el => areObjEqual(el, target));
-        curTarget.dependencies = [];
-        curTarget.dependencies.unshift(dependency);
-      }
-    } else {
-      this.registered.unshift(target);
+  register(target: any, depName?: string) {
+    let found;
+    if (this.queue.length > 0) {
+      found = this.queue.find(t => t.name === target.name);
     }
-
-
+    if (found) {
+      found.deps.push(depName);
+    } else {
+      const newItem = {
+        name: target.name,
+        class: target
+      };
+      newItem.deps = [];
+      if(depName !== undefined) {
+        newItem.deps = [...newItem.deps, depName]
+      }
+      this.queue.push(newItem);
+    }
   }
+
+  // get(name: string) {
+  //   const found = this.solved.find(s => s.name === name);
+  //   return (found && found.instance) || null;
+  // }
 
   initiate() {
-    this.registered.map(registredElemenet => {
-        console.log('registredElemenet', registredElemenet);
-      this.hasDeps(registredElemenet)
-    });
-    console.log('SOLVED: ', this.solved)
-  }
-
-  //1 wsadzamy root
-  //7 wsadzamy pServ
-  hasDeps(element: any) {
-    let curElement = element;
-    //2 root ma zaleznosci wiec idziemy dalej
-    //8 pServ ma zaleznosci wiec dalej
-      if (curElement.dependencies) {
-      //3 pierwsza zaleznosc root to pServ
-      //9 zaleznosc pServ to hServ
-          curElement.dependencies.forEach((depName :string) => {
-        //4 bierzemy pServ
-        //10 bierzemy hServ
-        const dependency = this.registered.find(d => d.name === depName);
-        //5 sprawdzamy czy pServ ma zaleznosci
-        //6 ma wiec idziemy do kroku 1
-        //11 sprawdzamy czy hServ ma zaleznosci - nie ma wiec return i idziemy dalej
-        this.hasDeps(dependency)
-        //12 sprawdzamy czy hServ ma instancje
-        let instanceData = this.instances.find(i => i.name === depName);
-        //13 ma wiec tworzymy go z zaleznoscia
-        if (instanceData) {
-          const elWithDep = new curElement(instanceData.instance);
-          this.solved.push(elWithDep);
-        } else {
-          this.instantiate(dependency);
+    this.queue.forEach(item => {
+      if(item.deps.length === 0) {
+        this.classes.push(item.class);
+        const fIndex = this.queue.findIndex(i => i === item);
+        if(fIndex !== -1){
+          this.queue.splice(fIndex, 1);
         }
-      });
-    } else {
-        return
-    }
+      } else {
+        item.deps.forEach(dep => {
+          console.log('dep', dep);
+          this.classes.forEach(c => console.log('d: ',c.name))
+        });
+      }
+    })
+    console.log('this.classes', this.classes);
+    console.log('this.queue', this.queue);
   }
 
-  instantiate(dependency: any) {
-      this.instances.push({ name: dependency.name, instance: new dependency()});
+  instantiate(element: any) {
+
   }
 
 }
 
 export const diContainer = new Container();
 
-export const Inject = (serviceName: any) => {
+export const Inject = (depName: any) => {
   return (target: any) => {
-    diContainer.register(target, serviceName);
+    diContainer.register(target, depName);
     return target;
   }
 };
