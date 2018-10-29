@@ -55,9 +55,9 @@ class Container {
   initiate() {
     //pozniej na while queue lenght > 0
     let iteration = 0;
-    let circularImplemented = iteration === this.queue.length + 1 ? true : false;
-    console.log('circularImplemented', circularImplemented)
-    while (this.queue.length > 0 && circularImplemented == false) {
+    let circularImplemented;
+
+    while (this.queue.length > 0 && !circularImplemented) {
       this.queue.forEach((item: IItem, index) => {
         if(item.depsQueue.length === 0) {
           this.instances.push(
@@ -91,6 +91,7 @@ class Container {
         }
       })
       iteration += 1;
+      circularImplemented = iteration === this.queue.length + 1 ? true : false;
     }
     if(circularImplemented === true) {
       console.log('THERES A CIRCULAR DEPENDENCY!')
