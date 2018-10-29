@@ -15,12 +15,12 @@ interface IProps {
 export class Root extends React.Component<IProps, IState> {
   state: IState;
 
-  constructor(props: IProps, private pServ: any){
+  constructor(props: IProps){
     super(props);
     this.state = {
       loaded: false,
     };
-    console.log('ROOT PROPS', props)
+    this.pServ = props.pServ;
   }
 
   componentDidMount() {
