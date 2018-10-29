@@ -10,16 +10,16 @@ import '../src/services/helper.service';
 import '../src/services/utils.service';
 import '../src/services/test.service';
 import '../src/services/testtest.service';
-import '../src/services/circularA.service';
-import '../src/services/circularB.service';
-import '../src/services/circularC.service';
+// import '../src/services/circularA.service';
+// import '../src/services/circularB.service';
+// import '../src/services/circularC.service';
 
 import { diContainer } from '../src/di/DIContainer';
 let loaded = diContainer.initiate();
 
 const instancesArr = diContainer.getInstances();
 console.log(instancesArr)
-instancesArr[3].updatePersons();
+instancesArr[5].updatePersons();
 
 // if(loaded) {
 //   const root = document.querySelector('#root');

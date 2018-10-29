@@ -6,10 +6,9 @@ const areObjEqual = require('../utils/areObjEqual');
 @Inject('httpService')
 @Inject('helperService')
 @Inject('testService')
-@Inject('circularAService')
 export class personsService {
 
-  constructor( private helperService: any, private htServ: any,){}
+  constructor( private tServ: any, private helperService: any, private htServ: any,){}
 
   pServ: personsService;
   persons: Array<IPerson> = [];

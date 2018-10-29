@@ -56,8 +56,8 @@ class Container {
     //pozniej na while queue lenght > 0
     let iteration = 0;
     let circularImplemented;
-
     while (this.queue.length > 0 && !circularImplemented) {
+      const befIterQueNo = this.queue.length;
       this.queue.forEach((item: IItem, index) => {
         if(item.depsQueue.length === 0) {
           this.instances.push(
@@ -66,6 +66,7 @@ class Container {
               instance: new item.class()
             }
           );
+          iteration += 1;
           this.queue.splice(index, 1);
         } else {
           let instancesToInject: any[] = [];
@@ -83,6 +84,7 @@ class Container {
                 instance: new item.class(...instancesToInject)
               }
             );
+            iteration += 1;
             const fIndex = this.queue.findIndex(i => i === item);
             if (fIndex !== -1) {
               this.queue.splice(fIndex, 1);
@@ -90,11 +92,11 @@ class Container {
           }
         }
       })
-      iteration += 1;
-      circularImplemented = iteration === this.queue.length + 1 ? true : false;
+      const afIterQueNo = this.queue.length;
+      circularImplemented = befIterQueNo === afIterQueNo;
     }
-    if(circularImplemented === true) {
-      console.log('THERES A CIRCULAR DEPENDENCY!')
+    if(circularImplemented) {
+      console.log('THERE\'S A CIRCULAR DEPENDENCY IMPLEMENTED!')
     }
     return true;
   }

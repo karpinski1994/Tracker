@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '../di/DIContainer';
+import { Injectable} from '../di/DIContainer';
 
 @Injectable
 export class testtestService {
