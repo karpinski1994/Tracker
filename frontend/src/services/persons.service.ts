@@ -7,7 +7,7 @@ const areObjEqual = require('../utils/areObjEqual');
 @Inject('helperService')
 export class personsService {
 
-  constructor(private htServ: any, private helperService: any){}
+  constructor( private helperService: any, private htServ: any,){}
 
   pServ: personsService;
   persons: Array<IPerson> = [];

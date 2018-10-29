@@ -2,7 +2,6 @@ const areObjEqual = require('../utils/areObjEqual');
 
 interface Container {
   queue: Array<object>;
-  solved: Array<object>;
   instances: Array<object>;
 }
 
@@ -10,7 +9,6 @@ class Container {
 
   constructor() {
     this.queue = [];
-    this.solved = [];
     this.instances = [];
   }
 
@@ -21,90 +19,71 @@ class Container {
     }
     if (found) {
       found.deps.push(depName);
+      found.depsQueue.push(depName);
     } else {
       const newItem = {
         name: target.name,
         class: target
       };
       newItem.deps = [];
+      newItem.depsQueue = [];
       if(depName !== undefined) {
         newItem.deps = [...newItem.deps, depName]
+        newItem.depsQueue = [...newItem.depsQueue, depName]
       }
       this.queue.push(newItem);
     }
   }
 
-  // get(name: string) {
-  //   const found = this.solved.find(s => s.name === name);
-  //   return (found && found.instance) || null;
-  // }
-
   initiate() {
     //pozniej na while queue lenght > 0
     for (let i = 0; i < 10; i++) {
       this.queue.forEach(item => {
-        console.log('ITEM:', item)
-        if(item.deps.length === 0) {
+        if(item.depsQueue.length === 0) {
           const instI = this.instances.findIndex(i => i instanceof item.class);
           if (instI === -1 ){
-            this.instances.push(new item.class());
-            this.solved.push(item);
+            this.instances.push({name: item.name, instance: new item.class()});
             const fIndex = this.queue.findIndex(i => i === item);
             if (fIndex !== -1) {
               this.queue.splice(fIndex, 1);
             }
           } else {
-            this.solved.push(item);
             const fIndex = this.queue.findIndex(i => i === item);
             if (fIndex !== -1) {
               this.queue.splice(fIndex, 1);
             }
           }
         } else {
+          let instancesToInject: any[] = [];
           item.deps.forEach(depName => {
-            const fDepInstanceIndex = this.solved.findIndex(s => s.name === depName);
-            // sprawdzamy zaleznosc czy ma instancje
-            // jesli ma
-            if (fDepInstanceIndex !== -1) {
-              console.log(console.log('instance to inject: ', this.instances[fDepInstanceIndex]));
-              const instanceToInject = this.instances[fDepInstanceIndex];
-              console.log("INSTANCE TO INJECT:", instanceToInject)
-              // powinnismy sprawdzac czy ta zaleznosc ma instancje
-              // sprawdzamy czy rodzic ma instancje
-              const itemInstanceIndex = this.instances.findIndex(i => i instanceof item.class);
-              console.log('itemInstanceIndex', itemInstanceIndex);
-              // jesli instancja jest to pushujemy nowa zaleznosc
-              if (itemInstanceIndex !== -1) {
-                console.log("UWAGA!")
-                console.log('INSTANCJA: ', this.instances[itemInstanceIndex]);
-                console.log('UWAGA!');
-                console.log('ITEM PRZED DEPENDENCY: ', item);
-                const rDepI = item.deps.findIndex(d => d.name === depName);
-                const removedDep = item.deps.splice(rDepI, 1);
-                console.log('UWAGA!');
-                console.log('ITEM PO DODANIU DEPENDENCY: ', item);
-               // jesli nie ma tworzymy instancje 
-              } else {
-                const rDepI = item.deps.findIndex(d => d.name === depName);
-                const removedDep = item.deps.splice(rDepI, 1);
-                this.instances.push(new item.class(instanceToInject));
+            const instanceToInject = this.instances.find(ins => ins.name === depName);
+            if (instanceToInject) {
+              instancesToInject.push(instanceToInject.instance);
+              const depQueueRmvIndex = item.depsQueue.findIndex((iName:string) => iName === depName);
+              if(depQueueRmvIndex !== -1) {
+                item.depsQueue.splice(depQueueRmvIndex, 1);
               }
-              
-              // console.log('----------------------------')
-              
             }
           });
+
+          if(instancesToInject.length === item.deps.length) {
+            console.log('ITEM: ', item, 'INSTANCES TO INJECT: ', instancesToInject);
+            this.instances.push({name: item.name, instance: new item.class(...instancesToInject)});
+
+            const fIndex = this.queue.findIndex(i => i === item);
+            if (fIndex !== -1) {
+              this.queue.splice(fIndex, 1);
+            }
+          } else {
+            console.log('ELSE !!!!!!!!!! ITEM: ', item, 'INSTANCES TO INJECT: ', instancesToInject);
+          }
+
         }
       })
     }
-    // console.log('----------------------------')
-    console.log('this.solved', this.solved);
+    //console.log('----------------------------')
     console.log('this.instances', this.instances);
-    // console.log('this.queue', this.queue);
-  }
-
-  instantiate(element: any) {
-
+   console.log('this.queue', this.queue);
   }
 
 }
