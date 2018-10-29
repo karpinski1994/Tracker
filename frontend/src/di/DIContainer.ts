@@ -44,12 +44,17 @@ class Container {
       }
       this.queue.push(newItem);
     }
+    target.dep = depName;
+    return target;
   }
 
   getInstances() {
-    const curInstances = [...this.instances];
-    const onlyInstances = curInstances.map(i => i.instance);
-    return onlyInstances;
+    return [...this.instances];
+  }
+
+  getInstance(name: string) {
+    const instance = this.instances.find(i => i.name === name);
+    return instance;
   }
 
   initiate() {

@@ -12,27 +12,19 @@ import '../services/testtest.service';
 import { diContainer } from './DIContainer';
 diContainer.initiate();
 const instancesArr = diContainer.getInstances();
-interface IState {
-}
 
-interface IProps {
-
-}
-
-
-
-export class DIComponent extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class DIComponent extends React.Component {
+  constructor(props: any) {
     super(props);
     this.state = {}
   }
 
   render() {
     const { children } = this.props;
-    console.log(children)
-    const childrenWithProps = React.Children.map(children, child =>
-      React.cloneElement(child, { pServ: instancesArr[5]})
-    );
+    const { instance } = diContainer.getInstance(children.type.dep);
+    const childrenWithProps = React.Children.map(children, child => {
+      return (React.cloneElement(child, { service: instance}));
+    });
     return(
       <div>
         {childrenWithProps}

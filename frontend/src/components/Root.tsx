@@ -20,7 +20,7 @@ export class Root extends React.Component<IProps, IState> {
     this.state = {
       loaded: false,
     };
-    this.pServ = props.pServ;
+    this.pServ = props.service;
   }
 
   componentDidMount() {
