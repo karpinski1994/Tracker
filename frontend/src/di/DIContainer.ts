@@ -44,12 +44,21 @@ class Container {
       }
       this.queue.push(newItem);
     }
-    target.dep = depName;
+
+    if(target.deps) {
+      target.deps.push(depName);
+    } else {
+      target.deps = [];
+      target.deps.push(depName);
+    }
     return target;
   }
 
   getInstances() {
-    return [...this.instances];
+    const curInstances = [...this.instances];
+    const obj = {};
+    curInstances.forEach(i => obj[`${i.name}`] = i.instance);
+    return obj;
   }
 
   getInstance(name: string) {

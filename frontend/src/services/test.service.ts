@@ -5,4 +5,7 @@ export class testService {
   constructor(private testtestServ: testtestService) {
     console.log('tworze testService');
   }
+  test() {
+    this.testtestServ.test();
+  }
 }

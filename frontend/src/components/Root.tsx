@@ -10,7 +10,7 @@ interface IState {
 
 interface IProps {
 }
-
+@Inject('testService')
 @Inject('personsService')
 export class Root extends React.Component<IProps, IState> {
   state: IState;
@@ -20,10 +20,11 @@ export class Root extends React.Component<IProps, IState> {
     this.state = {
       loaded: false,
     };
-    this.pServ = props.service;
+    console.log('ROOT SERVICES', props.services);
   }
 
   componentDidMount() {
+    this.pServ = this.props.services.personsService;
     this.load();
   }
 

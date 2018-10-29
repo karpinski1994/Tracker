@@ -11,7 +11,6 @@ import '../services/testtest.service';
 
 import { diContainer } from './DIContainer';
 diContainer.initiate();
-const instancesArr = diContainer.getInstances();
 
 export class DIComponent extends React.Component {
   constructor(props: any) {
@@ -21,9 +20,16 @@ export class DIComponent extends React.Component {
 
   render() {
     const { children } = this.props;
-    const { instance } = diContainer.getInstance(children.type.dep);
     const childrenWithProps = React.Children.map(children, child => {
-      return (React.cloneElement(child, { service: instance}));
+      let instancesRdy: any = [];
+      if(child) child.type.deps.forEach((depName: string) => {
+        const instance = diContainer.getInstance(depName);
+        instancesRdy.push(instance);
+      })
+      const curInstances = [...instancesRdy];
+        const obj = {};
+        curInstances.forEach(i => obj[`${i.name}`] = i.instance);
+      return (React.cloneElement(child, { services: obj}));
     });
     return(
       <div>
