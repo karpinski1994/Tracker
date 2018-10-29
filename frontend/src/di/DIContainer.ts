@@ -1,8 +1,19 @@
-const areObjEqual = require('../utils/areObjEqual');
+
+interface IInstance {
+  name?: string;
+  instance?: object;
+}
+
+interface IItem {
+  name?: string;
+  deps?: string[];
+  depsQueue?: string[];
+  class?: object
+}
 
 interface Container {
-  queue: Array<object>;
-  instances: Array<object>;
+  queue: Array<IItem>;
+  instances: Array<IInstance>;
 }
 
 class Container {
@@ -13,15 +24,15 @@ class Container {
   }
 
   register(target: any, depName?: string) {
-    let found;
+    let found : IItem;
     if (this.queue.length > 0) {
-      found = this.queue.find(t => t.name === target.name);
+      found = this.queue.find((t:any) => t.name === target.name);
     }
     if (found) {
       found.deps.push(depName);
       found.depsQueue.push(depName);
     } else {
-      const newItem = {
+      const newItem: IItem = {
         name: target.name,
         class: target
       };
@@ -35,55 +46,56 @@ class Container {
     }
   }
 
+  getInstances() {
+    const curInstances = [...this.instances];
+    const onlyInstances = curInstances.map(i => i.instance);
+    return onlyInstances;
+  }
+
   initiate() {
     //pozniej na while queue lenght > 0
-    for (let i = 0; i < 10; i++) {
-      this.queue.forEach(item => {
+    let iteration = 0;
+    let circularImplemented = iteration === this.queue.length + 1 ? true : false;
+    console.log('circularImplemented', circularImplemented)
+    while (this.queue.length > 0 && circularImplemented == false) {
+      this.queue.forEach((item: IItem, index) => {
         if(item.depsQueue.length === 0) {
-          const instI = this.instances.findIndex(i => i instanceof item.class);
-          if (instI === -1 ){
-            this.instances.push({name: item.name, instance: new item.class()});
-            const fIndex = this.queue.findIndex(i => i === item);
-            if (fIndex !== -1) {
-              this.queue.splice(fIndex, 1);
+          this.instances.push(
+            {
+              name: item.name,
+              instance: new item.class()
             }
-          } else {
-            const fIndex = this.queue.findIndex(i => i === item);
-            if (fIndex !== -1) {
-              this.queue.splice(fIndex, 1);
-            }
-          }
+          );
+          this.queue.splice(index, 1);
         } else {
           let instancesToInject: any[] = [];
-          item.deps.forEach(depName => {
-            const instanceToInject = this.instances.find(ins => ins.name === depName);
+          item.deps.forEach((depName:string, index) => {
+            const instanceToInject: IInstance = this.instances.find((ins:IInstance) => ins.name === depName);
             if (instanceToInject) {
               instancesToInject.push(instanceToInject.instance);
-              const depQueueRmvIndex = item.depsQueue.findIndex((iName:string) => iName === depName);
-              if(depQueueRmvIndex !== -1) {
-                item.depsQueue.splice(depQueueRmvIndex, 1);
-              }
+              item.depsQueue.splice(index, 1);
             }
           });
-
           if(instancesToInject.length === item.deps.length) {
-            console.log('ITEM: ', item, 'INSTANCES TO INJECT: ', instancesToInject);
-            this.instances.push({name: item.name, instance: new item.class(...instancesToInject)});
-
+            this.instances.push(
+              {
+                name: item.name,
+                instance: new item.class(...instancesToInject)
+              }
+            );
             const fIndex = this.queue.findIndex(i => i === item);
             if (fIndex !== -1) {
               this.queue.splice(fIndex, 1);
             }
-          } else {
-            console.log('ELSE !!!!!!!!!! ITEM: ', item, 'INSTANCES TO INJECT: ', instancesToInject);
           }
-
         }
       })
+      iteration += 1;
     }
-    //console.log('----------------------------')
-    console.log('this.instances', this.instances);
-   console.log('this.queue', this.queue);
+    if(circularImplemented === true) {
+      console.log('THERES A CIRCULAR DEPENDENCY!')
+    }
+    return true;
   }
 
 }

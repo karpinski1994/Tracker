@@ -5,6 +5,8 @@ const areObjEqual = require('../utils/areObjEqual');
 
 @Inject('httpService')
 @Inject('helperService')
+@Inject('testService')
+@Inject('circularAService')
 export class personsService {
 
   constructor( private helperService: any, private htServ: any,){}
