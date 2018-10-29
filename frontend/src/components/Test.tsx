@@ -9,6 +9,11 @@ interface IState {
 }
 
 interface IProps {
+  services: IServices;
+}
+
+interface IServices {
+  testService: function;
 }
 
 @Inject('testService')
@@ -18,8 +23,6 @@ export class Test extends React.Component<IProps, IState> {
   constructor(props: IProps){
     super(props);
     this.state = {};
-    // this.pServ = props.services.testService;
-    // console.log('TEST PROPS', props)
     console.log('TEST SERVICES', props.services);
   }
 

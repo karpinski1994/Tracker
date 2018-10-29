@@ -21,12 +21,12 @@ export class DIComponent extends React.Component {
   render() {
     const { children } = this.props;
     const childrenWithProps = React.Children.map(children, child => {
-      let instancesRdy: any = [];
+      let instances: any = [];
       if(child) child.type.deps.forEach((depName: string) => {
         const instance = diContainer.getInstance(depName);
-        instancesRdy.push(instance);
+        instances.push(instance);
       })
-      const curInstances = [...instancesRdy];
+      const curInstances = [...instances];
         const obj = {};
         curInstances.forEach(i => obj[`${i.name}`] = i.instance);
       return (React.cloneElement(child, { services: obj}));
