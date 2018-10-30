@@ -1,31 +1,31 @@
 import * as React from 'react';
 import { App } from './App';
 
-import { personsService } from '../services/persons.service';
-import '../services/http.service';
+import { Inject } from '../di/DIContainer';
 
-import { diContainer } from '../di/DIContainer';
 
 interface IState {
   loaded: boolean;
 }
 
-const instances = diContainer.initiate();
+interface IProps {
+}
 
-console.log(instances.get('httpService'))
-
-export class Root extends React.Component<{}, IState> {
-  pServ: personsService;
+@Inject('testService')
+@Inject('personsService')
+export class Root extends React.Component<IProps, IState> {
   state: IState;
-  constructor(props: Readonly<{}>) {
+
+  constructor(props: IProps){
     super(props);
     this.state = {
       loaded: false,
     };
-    this.pServ = new personsService(instances.get('httpService'));
+    console.log('ROOT SERVICES', props.services);
   }
 
   componentDidMount() {
+    this.pServ = this.props.services.personsService;
     this.load();
   }
 

@@ -3,12 +3,12 @@ import { Inject } from '../di/DIContainer';
 
 const areObjEqual = require('../utils/areObjEqual');
 
-
-
 @Inject('httpService')
+@Inject('helperService')
+@Inject('testService')
 export class personsService {
 
-  constructor(private htServ: any){}
+  constructor( private tServ: any, private helperService: any, private htServ: any,){}
 
   pServ: personsService;
   persons: Array<IPerson> = [];
@@ -70,7 +70,6 @@ export class personsService {
       persons.splice(removedPersonIndex, 1);
 
       this.persons = persons;
-      console.log(this.persons);
       this.htServ.deletePerson(id);
     }
     this.notifyAll();

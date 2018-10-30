@@ -16,7 +16,7 @@ class WalkingManager {
     person.location.lng = Math.sin(Math.PI / 180 * person.direction) * this.stepDist + person.location.lng;
     this.steps += 1;
     if (this.steps === this.changeDistance) {
-      person.direction = this.getRandomInt(0, 360);
+      person.direction += this.getRandomInt(0, 20);
       this.steps = 0;
     }
   }

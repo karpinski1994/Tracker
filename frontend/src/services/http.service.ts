@@ -1,8 +1,12 @@
 import { IPerson } from '../models/IPerson';
-import { Injectable } from '../di/DIContainer';
+import { Injectable, Inject } from '../di/DIContainer';
 
 @Injectable
 export class httpService {
+
+  constructor() {
+    console.log('tworze httpService');
+  }
 
   addPerson(person: IPerson) {
     return fetch(`http://localhost:3000/api/person/add`, {
