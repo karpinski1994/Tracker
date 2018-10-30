@@ -1,5 +1,9 @@
 import * as React from 'react';
 
+interface IProps {
+  services: any;
+}
+
 interface IInstance {
   name?: string;
   instance?: object;
@@ -9,7 +13,7 @@ interface IItem {
   name?: string;
   deps?: string[];
   depsQueue?: string[];
-  class?: object
+  class?: any
 }
 
 interface Container {
@@ -57,7 +61,7 @@ class Container {
 
   getInstances() {
     const curInstances = [...this.instances];
-    const obj = {};
+    const obj: any = {};
     curInstances.forEach(i => obj[`${i.name}`] = i.instance);
     return obj;
   }
@@ -123,11 +127,17 @@ export const diContainer = new Container();
 export const Inject = (depName: any) => {
 
   return (Target: any) => {
+    if (process.env.NODE_ENV === 'test') {
+      return Target;
+    }
     const isComponent = Target.prototype instanceof React.Component;
     if (isComponent) {
-      class Injector extends React.Component {
+      class Injector extends React.Component<IProps, {}> {
+        constructor(props: IProps) {
+          super(props)
+        }
         render() {
-          const services = this.props.services || {};
+          const services: any = this.props.services || {};
           services[depName] = diContainer.instances.find(d => d.name === depName).instance;
           return <Target services={services} />;
         }
@@ -141,6 +151,9 @@ export const Inject = (depName: any) => {
 };
 
 export const Injectable = (target: any) => {
+  if (process.env.NODE_ENV === 'test') {
+    return target;
+  }
   diContainer.register(target);
   return target;
 };

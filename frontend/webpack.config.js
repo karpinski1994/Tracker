@@ -1,7 +1,7 @@
 const path = require("path");
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
+const webpack = require('webpack');
 module.exports = {
   mode: 'development',
   entry: './src/index.tsx',
@@ -40,7 +40,10 @@ module.exports = {
     new HTMLWebpackPlugin({
       template: './index.html'
     }),
-    new ExtractTextPlugin('style.css')
+    new ExtractTextPlugin('style.css'),
+    new webpack.DefinePlugin({
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+    }),
   ],
   devtool: 'source-map',
   resolve: {

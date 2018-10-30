@@ -27,7 +27,7 @@ export class personsService {
 
   updatePersons() {
     return this.htServ.getPersons()
-    .then(data => {
+    .then((data: any) => {
       if(data.persons) {
         this.persons = [...data.persons];
         return this.persons;
