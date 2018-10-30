@@ -1,3 +1,4 @@
+import * as React from 'react';
 
 interface IInstance {
   name?: string;
@@ -120,9 +121,22 @@ class Container {
 export const diContainer = new Container();
 
 export const Inject = (depName: any) => {
-  return (target: any) => {
-    diContainer.register(target, depName);
-    return target;
+
+  return (Target: any) => {
+    const isComponent = Target.prototype instanceof React.Component;
+    if (isComponent) {
+      class Injector extends React.Component {
+        render() {
+          const services = this.props.services || {};
+          services[depName] = diContainer.instances.find(d => d.name === depName).instance;
+          return <Target services={services} />;
+        }
+      }
+
+      return Injector;
+    }
+    diContainer.register(Target, depName);
+    return Target;
   }
 };
 

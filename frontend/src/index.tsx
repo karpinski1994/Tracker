@@ -5,9 +5,17 @@ import { Test } from './components/Test';
 import './styles/style.scss';
 import registerServiceWorker from './registerServiceWorker';
 
-import { DIComponent } from '../src/di/DIComponent';
+import './services/persons.service';
+import './services/http.service';
+import './services/helper.service';
+import './services/utils.service';
+import './services/test.service';
+import './services/testtest.service';
+
+import { diContainer } from '../src/di/DIContainer';
+diContainer.initiate();
 
 const root = document.querySelector('#root');
 // ReactDOM.render(<Root/>, root);
-ReactDOM.render(<DIComponent><Root/><Test /></DIComponent>, root);
+ReactDOM.render(<div><Root/><Test /></div>, root);
 registerServiceWorker();

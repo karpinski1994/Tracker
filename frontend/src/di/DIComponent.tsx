@@ -22,10 +22,12 @@ export class DIComponent extends React.Component {
     const { children } = this.props;
     const childrenWithProps = React.Children.map(children, child => {
       let instances: any = [];
-      if(child) child.type.deps.forEach((depName: string) => {
-        const instance = diContainer.getInstance(depName);
-        instances.push(instance);
-      })
+      if(child) {
+        child.type.deps.forEach((depName: string) => {
+          const instance = diContainer.getInstance(depName);
+          instances.push(instance);
+        })
+      }
       const curInstances = [...instances];
         const obj = {};
         curInstances.forEach(i => obj[`${i.name}`] = i.instance);

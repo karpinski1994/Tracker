@@ -10,6 +10,7 @@ interface IState {
 
 interface IProps {
 }
+
 @Inject('testService')
 @Inject('personsService')
 export class Root extends React.Component<IProps, IState> {
