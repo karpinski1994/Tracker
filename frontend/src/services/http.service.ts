@@ -21,7 +21,7 @@ export class httpService {
       redirect: "follow", // manual, *follow, error
       referrer: "no-referrer", // no-referrer, *client
       body: JSON.stringify(person), // body data type must match "Content-Type" header
-      })
+    })
   }
 
   getPersons() {

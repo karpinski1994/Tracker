@@ -17,7 +17,7 @@ export class personsService {
   subscribe = (obj: any) => {
     obj.obsId = this.observerList.length;
     return this.observerList.push(obj);
-  };
+  }
 
   notifyAll = () =>{
     for(var i=0; i < this.observerList.length; i++){
@@ -25,6 +25,7 @@ export class personsService {
     }
   }
 
+  //  *
   updatePersons() {
     return this.htServ.getPersons()
     .then((data: any) => {
@@ -35,10 +36,7 @@ export class personsService {
     });
   }
 
-  getPersons(): IPerson[] {
-    return [...this.persons];
-  }
-
+  //  *
   addPerson(person: IPerson) {
     let updPersons = [];
     if (this.persons.length > 0) {
@@ -55,13 +53,21 @@ export class personsService {
     this.htServ.addPerson(person);
   }
 
+  // *
+  getPersons(): IPerson[] {
+    return [...this.persons];
+  }
+
+  // *
   getPerson(id: string): IPerson {
     if (this.persons.length > 0) {
       const person = this.persons.filter(p => p.id === `${id}` )[0];
       return person;
     }
+    // to wypadałoby obsłużyć jakoś
+    // ale to stara funkcja sprzed czasow socket.io
   }
-
+  // *
   deletePerson(id: string) {
     let persons;
     if (this.persons.length > 0) {
@@ -74,11 +80,11 @@ export class personsService {
     }
     this.notifyAll();
   }
-
+  // *
   setWalking() {
     this.htServ.activateWalking();
   }
-
+  // *
   unsetWalking() {
     this.htServ.disactivateWalking();
   }
