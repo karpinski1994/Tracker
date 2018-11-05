@@ -3,25 +3,19 @@
 export class MockHttpService  {
   persons = [
     {
-      id: 'AAA',
-      name: 'AAA',
+      id: '123213',
+      name: 'example name',
       location: {lat: 0, lng: 0},
       direction: 0
-    },
-    {
-      id: 'BBB',
-      name: 'BBB',
-      location: {lat: 0, lng: 0},
-      direction: 0
-    },
-  ]
+    }
+  ];
 
   person = {
-    id: 'CCC',
-    name: 'CCC',
+    id: '123213',
+    name: 'example name',
     location: {lat: 0, lng: 0},
     direction: 0
-  }
+  };
 
   getPersons = () => {
     return new Promise((resolve, reject) => {

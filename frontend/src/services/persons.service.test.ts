@@ -31,90 +31,44 @@ const httpService = {
   }
 };
 
-const instance = new personsService({}, {}, httpService);
 
-const examplePersons = [
-  {
-    id: '123213',
-    name: 'example name',
-    location: {lat: 0, lng: 0},
-    direction: 0
-  }
-];
-
-const mockedUpdPersons = [
-  {
-    id: '123213',
-    name: 'example name',
-    location: {lat: 0, lng: 0},
-    direction: 0
-  },
-  {
-    id: '231321',
-    name: 'test name',
-    location: {lat: 1, lng: 1},
-    direction: 1
-  }
-];
-
-const exampleObj = {
-    id: '123213',
-    name: 'example name',
-    location: {lat: 0, lng: 0},
-    direction: 0
+const mockedPerson = {
+  id: '123213',
+  name: 'example name',
+  location: {lat: 0, lng: 0},
+  direction: 0
 };
 
-
-instance.persons = examplePersons;
-
+let instance: any = {};
 
 
 describe('PersonsService', () => {
-  jest.spyOn(instance, 'getPersons');
-  jest.spyOn(instance, 'updatePersons');
-  jest.spyOn(httpService, 'activateWalking');
-  jest.spyOn(httpService, 'disactivateWalking');
-  jest.spyOn(httpService, 'addPerson');
-  jest.spyOn(httpService, 'deletePerson');
-
-  /*
   beforeEach(() => {
-    initializeCityDatabase();
+    instance = new personsService({}, {}, httpService);
+    jest.spyOn(instance, 'getPersons');
+    jest.spyOn(instance, 'updatePersons');
+    jest.spyOn(httpService, 'activateWalking');
+    jest.spyOn(httpService, 'disactivateWalking');
+    jest.spyOn(httpService, 'addPerson');
+    jest.spyOn(httpService, 'deletePerson');
   });
-  */
+
 
 
   //  addPerson
   it('Expect to add person.', () => {
-    instance.addPerson(
-      {
-        id: '231321',
-        name: 'test name',
-        location: {lat: 1, lng: 1},
-        direction: 1
-      }
-    );
-    expect(httpService.addPerson).toHaveBeenCalledWith({
-      id: '231321',
-      name: 'test name',
-      location: {lat: 1, lng: 1},
-      direction: 1
-    });
-    expect(instance.persons).toEqual(mockedUpdPersons)
+    instance.addPerson(mockedPerson);
+    expect(httpService.addPerson).toHaveBeenCalledWith(mockedPerson);
+    expect(instance.persons).toEqual([mockedPerson])
     expect(httpService.addPerson).toHaveBeenCalled();
   });
 
   // deletePerson
   it('Expect to delete person', () => {
+    instance.persons = [mockedPerson];
+    expect(instance.persons.length).toEqual(1);
     instance.deletePerson('231321');
-    expect(instance.persons).toEqual([
-      {
-        id: '123213',
-        name: 'example name',
-        location: {lat: 0, lng: 0},
-        direction: 0
-      }
-    ]);
+    expect(instance.persons.length).toEqual(0);
     expect(httpService.deletePerson).toHaveBeenCalled();
     expect(httpService.deletePerson).toHaveBeenCalledWith('231321');
   });
@@ -122,14 +76,11 @@ describe('PersonsService', () => {
 
   //  updatePersons
   it('Expect to update persons', (done) => {
-    // expect.assertions(3);
     instance.updatePersons();
     expect(instance.updatePersons).toReturn();
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@1");
     mockUpdatePersons().then(personsArray =>  {
-      expect(instance.persons).toEqual(mockedUpdPersons);
-      expect(personsArray).toEqual(mockedUpdPersons);
-      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2");
+      expect(instance.persons).toEqual([mockedPerson]);
+      expect(personsArray).toEqual([mockedPerson]);
       done();
     });
   });
@@ -166,8 +117,8 @@ describe('PersonsService', () => {
 
   //  unsetWalking
   it('Expect httpService.disactivateWalking to be called on personsService.unsetWalking invocation.', () => {
-   instance.unsetWalking()
-   expect(httpService.disactivateWalking).toHaveBeenCalled();
+    instance.unsetWalking()
+    expect(httpService.disactivateWalking).toHaveBeenCalled();
   })
 
   // TEST THAT DOESNT PASS FOR SURE
