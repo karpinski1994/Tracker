@@ -77,9 +77,15 @@ describe('PersonsService', () => {
   jest.spyOn(httpService, 'addPerson');
   jest.spyOn(httpService, 'deletePerson');
 
+  /*
+  beforeEach(() => {
+    initializeCityDatabase();
+  });
+  */
+
 
   //  addPerson
-  it('Expect to call htServ.addPerson', () => {
+  it('Expect to add person.', () => {
     instance.addPerson(
       {
         id: '231321',
@@ -88,14 +94,14 @@ describe('PersonsService', () => {
         direction: 1
       }
     );
-    expect(instance.persons).toEqual(mockedUpdPersons)
-    expect(httpService.addPerson).toHaveBeenCalled();
     expect(httpService.addPerson).toHaveBeenCalledWith({
       id: '231321',
       name: 'test name',
       location: {lat: 1, lng: 1},
       direction: 1
     });
+    expect(instance.persons).toEqual(mockedUpdPersons)
+    expect(httpService.addPerson).toHaveBeenCalled();
   });
 
   // deletePerson
@@ -108,19 +114,23 @@ describe('PersonsService', () => {
         location: {lat: 0, lng: 0},
         direction: 0
       }
-    ])
+    ]);
     expect(httpService.deletePerson).toHaveBeenCalled();
     expect(httpService.deletePerson).toHaveBeenCalledWith('231321');
   });
 
+
   //  updatePersons
-  it('Expect to update persons', () => {
-    expect.assertions(1);
+  it('Expect to update persons', (done) => {
+    // expect.assertions(3);
     instance.updatePersons();
     expect(instance.updatePersons).toReturn();
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@1");
     mockUpdatePersons().then(personsArray =>  {
       expect(instance.persons).toEqual(mockedUpdPersons);
       expect(personsArray).toEqual(mockedUpdPersons);
+      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2");
+      done();
     });
   });
 
@@ -142,12 +152,6 @@ describe('PersonsService', () => {
     });
   });
 
-  //  getPerson with empty string
-  it('Expect to return some message', () => {
-    const returnedValue = instance.getPerson('');
-    expect(typeof (returnedValue) !== 'undefined').toBe(true);
-  });
-
    //  getPerson - co tu zrobić w persons.service if
    it('Expect to return undefined when given empty string', () => {
     const returnedValue = instance.getPerson('');
@@ -165,4 +169,19 @@ describe('PersonsService', () => {
    instance.unsetWalking()
    expect(httpService.disactivateWalking).toHaveBeenCalled();
   })
+
+  // TEST THAT DOESNT PASS FOR SURE
+  //  getPerson with empty string
+  it('Expect to return some message', () => {
+    const returnedValue = instance.getPerson('');
+    expect(typeof (returnedValue) !== 'undefined').toBe(true);
+  });
+
+  // try to delete person without passing a person
+  it('Expect to throw an error and not to call httpService', () => {
+    instance.deletePerson(undefined);
+    expect(instance.deletePerson).toThrow();
+    expect(httpService.deletePerson).not.toHaveBeenCalled();
+  });
+
 });
