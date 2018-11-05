@@ -14,16 +14,16 @@ export class personsService {
   persons: Array<IPerson> = [];
   observerList: Array<any> = [];
 
-  subscribe = (obj: any) => {
-    obj.obsId = this.observerList.length;
-    return this.observerList.push(obj);
-  }
+  // subscribe = (obj: any) => {
+  //   obj.obsId = this.observerList.length;
+  //   return this.observerList.push(obj);
+  // }
 
-  notifyAll = () =>{
-    for(var i=0; i < this.observerList.length; i++){
-      this.observerList[i](this.persons);
-    }
-  }
+  // notifyAll = () => {
+  //   for(var i=0; i < this.observerList.length; i++){
+  //     this.observerList[i](this.persons);
+  //   }
+  // }
 
   //  *
   updatePersons() {
@@ -49,7 +49,7 @@ export class personsService {
       updPersons.push(person);
     }
     this.persons = updPersons;
-    this.notifyAll();
+    // this.notifyAll();
     this.htServ.addPerson(person);
   }
 
@@ -67,6 +67,7 @@ export class personsService {
     // to wypadałoby obsłużyć jakoś
     // ale to stara funkcja sprzed czasow socket.io
   }
+
   // *
   deletePerson(id: string) {
     let persons;
@@ -78,12 +79,14 @@ export class personsService {
       this.persons = persons;
       this.htServ.deletePerson(id);
     }
-    this.notifyAll();
+    // this.notifyAll();
   }
+
   // *
   setWalking() {
     this.htServ.activateWalking();
   }
+
   // *
   unsetWalking() {
     this.htServ.disactivateWalking();

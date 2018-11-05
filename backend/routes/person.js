@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const areObjEqual = require('../utils/areObjEqual');
 
-const filePath = '/Users/softwarehut/persons.json';
+const filePath = 'C:/tracker-data/persons.json';
 
 const WalkingManager = require('../managers/WalkingManager');
 const walkingManager = new WalkingManager();
