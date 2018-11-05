@@ -64,8 +64,6 @@ export class personsService {
       const person = this.persons.filter(p => p.id === `${id}` )[0];
       return person;
     }
-    // to wypadałoby obsłużyć jakoś
-    // ale to stara funkcja sprzed czasow socket.io
   }
 
   // *

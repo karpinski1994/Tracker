@@ -157,5 +157,6 @@ module.exports = (io) => {
     isTimerSet = false;
     if (timer) timer.clear();
   });
+
   return router;
 };

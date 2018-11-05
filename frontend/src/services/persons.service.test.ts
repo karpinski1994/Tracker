@@ -4,7 +4,6 @@ import {personsService} from './persons.service';
 import { IPerson } from '../models/IPerson';
 
 import {mockUpdatePersons} from '../services/__mocks__/persons.service';
-import {persons} from '../services/__mocks__/persons.service';
 const fetchedUsers = [
   {
     id: 'adssad',
@@ -43,6 +42,21 @@ const examplePersons = [
   }
 ];
 
+const mockedUpdPersons = [
+  {
+    id: '123213',
+    name: 'example name',
+    location: {lat: 0, lng: 0},
+    direction: 0
+  },
+  {
+    id: '231321',
+    name: 'test name',
+    location: {lat: 1, lng: 1},
+    direction: 1
+  }
+];
+
 const exampleObj = {
     id: '123213',
     name: 'example name',
@@ -56,7 +70,6 @@ instance.persons = examplePersons;
 
 
 describe('PersonsService', () => {
-  jest.spyOn(instance, 'getPerson');
   jest.spyOn(instance, 'getPersons');
   jest.spyOn(instance, 'updatePersons');
   jest.spyOn(httpService, 'activateWalking');
@@ -75,7 +88,7 @@ describe('PersonsService', () => {
         direction: 1
       }
     );
-    expect(instance.persons).toEqual(persons)
+    expect(instance.persons).toEqual(mockedUpdPersons)
     expect(httpService.addPerson).toHaveBeenCalled();
     expect(httpService.addPerson).toHaveBeenCalledWith({
       id: '231321',
@@ -106,8 +119,8 @@ describe('PersonsService', () => {
     instance.updatePersons();
     expect(instance.updatePersons).toReturn();
     mockUpdatePersons().then(personsArray =>  {
-      expect(instance.persons).toEqual(persons);
-      expect(personsArray).toEqual(persons);
+      expect(instance.persons).toEqual(mockedUpdPersons);
+      expect(personsArray).toEqual(mockedUpdPersons);
     });
   });
 
@@ -121,13 +134,18 @@ describe('PersonsService', () => {
   //  getPerson
   it('Expect to return person', () => {
     const returnedValue = instance.getPerson('123213');
-    expect(instance.getPerson).toReturn();
     expect(returnedValue).toEqual({
       id: '123213',
       name: 'example name',
       location: {lat: 0, lng: 0},
       direction: 0
     });
+  });
+
+  //  getPerson with empty string
+  it('Expect to return some message', () => {
+    const returnedValue = instance.getPerson('');
+    expect(typeof (returnedValue) !== 'undefined').toBe(true);
   });
 
    //  getPerson - co tu zrobić w persons.service if
